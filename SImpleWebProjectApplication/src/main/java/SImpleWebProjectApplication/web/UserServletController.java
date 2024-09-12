@@ -168,7 +168,12 @@ public class UserServletController extends HttpServlet {
 	
 		int id=Integer.parseInt(request.getParameter("id"));
 		User user=userDao.getUserbyId(id);
+		
+
+				
 		request.setAttribute("user", user);
+		request.setAttribute("workAddress",user.getWork_address());
+		request.setAttribute("homeAddress",user.getHome_address());
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("details.jsp");
 		dispatcher.forward(request, response);
