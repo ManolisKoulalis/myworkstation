@@ -63,10 +63,10 @@
 <form class="register_form" name="myform" action="<%=request.getContextPath()%>/insert" method="post" >
 
 <label for="name">  <b>Name:*</b>    </label> 
-<input type="text" placeholder="Enter your name" name="name" id="name" required maxlength="30" pattern="[A-Za-z]{3,30}" oninvalid="this.setCustomValidity('Please Enter Your Name')" oninput="setCustomValidity('')">
+<input type="text" placeholder="Enter your name" name="name" id="name" required maxlength="30" pattern="[A-Za-z]{3,30}" oninvalid="this.setCustomValidity('Please Enter Your Name(Only Characters Allowed, between 3-30 characters)')" oninput="setCustomValidity('')">
                 
 <label for="surname"><b>Surname:*</b></label>
-<input type="text" placeholder="Enter your surname" name="surname" id="surname" required  maxlength="30" pattern="[A-Za-z]{3,30}" oninvalid="this.setCustomValidity('Please Enter Your Surname')" oninput="setCustomValidity('')">
+<input type="text" placeholder="Enter your surname" name="surname" id="surname" required  maxlength="30" pattern="[A-Za-z]{3,30}" oninvalid="this.setCustomValidity('Please Enter Your Surname(Only Characters Allowed, between 3-30 characters)')" oninput="setCustomValidity('')">
 
 <label for="gender"><b>Gender:*</b></label>
 <select name="gender" id="gender" required oninvalid="this.setCustomValidity('Please Enter Your Gender')" oninput="setCustomValidity('')">

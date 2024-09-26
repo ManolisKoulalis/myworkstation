@@ -97,48 +97,39 @@ public class UserServletController extends HttpServlet {
 		
 	
 	String name=request.getParameter("name");
-	   if (name.matches(".*\\d.*") || name.length()<3 || name.length()>30) {
-       	message += "Please insert a valid name (Only Characters Allowed, between 2-30 characters)<br>";
-       	valid = false;
-       }
+	 
 	
 	String surname=request.getParameter("surname");
-	if (surname.matches(".*\\d.*") || surname.length()<3 || surname.length()>30) {
-    	message += "Please insert a valid surname (Only Characters Allowed, between 2-30 characters)<br>";
-    	valid = false;
-    }
+	
 	
 	String gender=request.getParameter("gender");	
-	 if (!gender.equals("Male") && !gender.equals("Female")) {
- 		message += "Please select a valid gender (Male or Female)<br>";
- 		valid = false;
- 	}
+	
 	
 	LocalDate birthdate=LocalDate.parse(request.getParameter("birthdate"));
        		
 	
 	String workPostcode= request.getParameter("workPostcode");
-	  if (workPostcode.length()>5) {
-      	message += "Work postcode characters exceed limit (5)";
+	  if (workPostcode.length()>6) {
+      	message += "Work postcode characters exceed limit (5).<br>";
   		valid = false;
 	    }
 	
 	String workAddressName=request.getParameter("workAddressName");
 	 if (workAddressName.length()>255) {
-	     	message += "Work Address characters exceed limit (255)";
+	     	message += "Work Address characters exceed limit (255).<br>";
 	 		valid = false;
 	 	}
 	
 	String homePostcode= request.getParameter("homePostcode");
-	  if (homePostcode.length()>5) {
-	      	message += "Home postcode characters exceed limit (5)";
+	  if (homePostcode.length()>6) {
+	      	message += "Home postcode characters exceed limit (5).<br>";
 	  		valid = false;
 		    }
 		
 	
 	String homeAddressName=request.getParameter("homeAddressName");
 	 if (homeAddressName.length()>255) {
-     	message += "Home Address characters exceed limit (255)";
+     	message += "Home Address characters exceed limit (255).<br>";
  		valid = false;
  	}
 	 
