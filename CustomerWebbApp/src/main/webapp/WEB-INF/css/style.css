@@ -1,0 +1,311 @@
+@charset "utf-8";
+
+
+
+      h1, h2{
+       
+        align-items: center;
+        justify-content: center;
+        display: flex;
+       
+    }
+
+    #left_h2{
+
+      align-items: center;
+     justify-content: left;
+      display: flex;
+    
+       a{
+      text-decoration:underline;
+      display: block;  
+      color: inherit;
+      
+
+    }
+
+    }
+    h1.dotted{
+       text-decoration:underline  dotted  ;
+      
+    }
+
+    nav {
+        background-color: rgb(139, 226, 226);
+        height: 45px;
+
+    }
+
+    ul{
+      height: 100%;
+      display:flex;
+      justify-content: left;
+      align-items: center;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    li{
+      margin: 0 15px;
+      padding: 0 15;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      background-color:rgb(139, 226, 226);
+      color: black;
+      
+      a{
+      text-decoration:underline;
+      display: block;  
+      color: inherit;
+     }
+
+    
+    }
+    #left_item{
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      height: 100%;
+       a{
+      text-decoration:underline;
+      display: block;  
+      color: inherit;
+
+    }
+  }
+  #createCustomer{
+   
+    display: flex;
+    justify-content: center;
+    color: black;
+    a{
+      text-decoration:underline ;
+      display: block;  
+      color: inherit;
+     }
+     
+    align-items: center;
+     margin:  30px;
+      padding:  0;
+      height: 90%;
+      
+  }
+
+  #listofCustomer{
+     display: flex;
+    justify-content: center;
+    color: black;
+    a{
+      text-decoration:underline ;
+      display: block;  
+      color: inherit;
+      
+     }
+    align-items: center;
+      margin:  30px;
+      padding:  0;
+      height: 90%;
+    
+    }
+
+
+  #tagofcreation{
+    display: flex;
+    justify-content: space-between;
+    align-self:flex-end;
+    
+     margin:  -50px;
+     padding-right: 70%;
+    
+  }
+  #loginCustomer{
+   
+    display: flex;
+    justify-content:center;
+    color: black;
+    a{
+      text-decoration:underline ;
+      display: block;  
+      color: inherit;
+      
+     }
+    align-items:flex-start;
+      
+      
+      height: 80%;
+    
+  }
+
+  #container_first_page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px ridge black ;
+    height: 20vh;
+    
+     margin:  50px;
+     padding: 30px;
+     background-color:rgb(139, 226, 226);
+  }
+ 
+
+form{
+  display: grid;
+  grid-auto-rows: min-content;
+  grid-template-columns: 1fr 4fr;
+  row-gap: 10px;
+  column-gap: 10px;
+
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+
+  border: 5px ridge black;
+  background-color:rgb(139, 226, 226);
+
+  label{
+    align-self: center;
+   
+    
+  }
+
+  textarea{
+    
+    display: block;
+    height: 30px;
+    
+  }
+  input[type="submit"]{
+    grid-column-start: 1;
+    grid-column-end: -1;
+
+  }
+
+  textarea#moreInfo{
+    resize: none;
+    height: 100px;
+  }
+
+  textarea#workAddressName{
+    resize: none;
+
+  }
+  textarea{
+    resize: none;
+
+  }
+
+}
+
+
+
+table{
+  border: 5px black ridge;
+  border-spacing: 3px 3px;
+  align-items: center;
+  background-color:rgb(139, 226, 226);
+  a{
+    text-decoration: none;
+    display: block;
+
+  }
+
+  a#href_delete{
+     
+      color: brown;
+    }
+  a#href_edit{
+      
+      color: rgb(4, 10, 3);
+    }
+}
+
+td{
+  
+  border: 1px  rgb(0, 0, 0) solid;
+  border-radius: 7px;
+  background-color: aliceblue;
+
+}
+
+th{
+  text-decoration: underline;
+  border: 1px  rgb(0, 0, 0) solid;
+  background-color: aliceblue;
+}
+
+
+div.details_table_container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+}
+
+.submit{
+   cursor: pointer;
+    margin: 10px 0 20px 0;
+    padding: 8px;
+}
+.submit:hover{
+    background-color: rgb(147, 119, 199);
+
+}
+.submit:active{
+    
+    background-color: rgb(4, 255, 16);
+}
+
+caption{
+   text-decoration: underline   dotted;
+}
+
+
+div.work_table_container{
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+div.work_table{
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+#divaddWork{
+  display: flex;
+  justify-content: center;
+  align-self: flex-start;
+  align-items: flex-start;
+  
+  
+ 
+
+}
+ a#addWork{
+    border: 1px solid black;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    display: block;
+    
+    background-color: lightgray;
+    border-radius: 4px;
+    justify-content: center;
+    
+
+  }
+
+  #addWork:hover{
+      background-color: rgb(32, 231, 49);
+    }
+
+ 
+
+   
+
