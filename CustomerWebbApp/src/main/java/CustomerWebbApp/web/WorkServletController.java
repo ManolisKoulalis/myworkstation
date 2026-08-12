@@ -2,12 +2,11 @@ package CustomerWebbApp.web;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +17,16 @@ import CustomerWebbApp.Model.Address;
 import CustomerWebbApp.Model.Customer;
 import CustomerWebbApp.Model.Work;
 
-/**
- * Servlet implementation class WorkServletController
- */
+
+
+@WebServlet(urlPatterns = {
+		"/addWork",
+		"/insertWork",
+	    "/deleteWork",
+	    "/updateWork",
+	    "/editWork",
+	    "/workDetails"
+	})
 public class WorkServletController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -36,7 +42,9 @@ public class WorkServletController extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		request.setCharacterEncoding("UTF-8");
+	    response.setCharacterEncoding("UTF-8");
+
 		doGet(request, response);
 	}
 	
@@ -83,7 +91,7 @@ String action=request.getServletPath();
 		  request.setAttribute("customerId", customerId);
 		
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WorkFormPage.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("insertWorkPage.jsp");
 		dispatcher.forward(request, response);
 		
 	}
@@ -92,15 +100,44 @@ String action=request.getServletPath();
 	
 	public void deleteWork(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException,ServletException{
 		
-		int id= Integer.parseInt(request.getParameter("id"));
-		workDao.deleteWork(id);
-		int idcustomer= Integer.parseInt(request.getParameter("id"));
+		
+		/*Εδω παιρνουμε το work απο ενα session και οταν παιρνουμε το customer το κανουμε απο αλλο session με αποτελεσμα
+		το work με πχ id=5 και το work που ειναι μεσα στο worklist με id=5 να μπορει να εχουν διαφορετικες αναφορες , ετσι οταν παω να κανω το remove(work) που συγκρινει με το equals
+		αρα με αναφορες να μην μπορει πολλες φορες να βρει το σωστο work ετσι χρησιμοποιω το removeif για να επιλλεξω αυτο που εχει το ιδιο id και οχι την ιδια αναφορα */
+		int id= Integer.parseInt(request.getParameter("workId"));
+		
+		
+		
+		int idcustomer= Integer.parseInt(request.getParameter("customerId"));
 		Customer customer= customerDao.getCustomerbyId(idcustomer);
+
+		/* αν ηθελα να το κανω με lamda
+		final int tempId = id;
+		customer.getWorklist().removeIf(w -> w.getId() == tempId);
+		*/
+		List<Work> worklist=null;
+		worklist = customer.getWorklist();
+		
+		Work worktoRemove = null;
+		
+		for (Work w : worklist) {
+		    if (w.getId() == id) {
+		        worktoRemove = w;
+		        break;
+		    }
+		}
+		// δεν κανω το remove γτ  μπορεί να πετάξει ConcurrentModificationException
+		if (worktoRemove != null) {
+		    worklist.remove(worktoRemove);
+		}
+
+		
+		customerDao.updateCustomer(customer);
 		
 		//List<Work> worklist = customer.getWorklist();
 		request.setAttribute("customer",customer);
 		//request.setAttribute("worklist",worklist); 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("logedinCustomer.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("logedinpage.jsp");
 		dispatcher.forward(request, response);
 		
 	}
@@ -112,7 +149,8 @@ String action=request.getServletPath();
 		
 		//με το κουμπι add work στελνω το customer id στην σελιδα με την φορμα για το το work ετσι πηρα εδω το id απο το hidden πεδιο στην σελιδα
 		 int customerId = Integer.parseInt(request.getParameter("customerId"));
-		 Customer customer = customerDao.getCustomerbyId(customerId);
+		
+		 // Customer customer = customerDao.getCustomerbyId(customerId);
 		
 		 String message = "";
 		 boolean valid = true;
@@ -123,7 +161,7 @@ String action=request.getServletPath();
 			  valid = false;
 
 		 }
-		 else if (workType.matches(".*\\d.*") || workType.length()<2 || workType.length()>30  ) {
+		 else if (!workType.matches("[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\\s]{2,30}") ) {
 		     	message += "Please insert a valid work type (Only Characters Allowed, between 2-30 characters)<br>";
 		     	valid = false;
 		     }
@@ -141,7 +179,7 @@ String action=request.getServletPath();
 		 	}
 		 
 		 String constructionPostcode= request.getParameter("constructionPostcode");
-		 if (!constructionPostcode.matches("\\d{5}")||constructionPostcode == null) {
+		 if (constructionPostcode == null || !constructionPostcode.matches("\\d{5}")) {
 			    message += "Construction postcode must contain exactly 5 digits.<br>";
 			    valid = false;
 			}
@@ -210,17 +248,21 @@ String action=request.getServletPath();
 		 
 		 
 		 String moreInfo=request.getParameter("moreInfo");
-		 if (moreInfo.length()>255) {
-		     	message += "Information characters exceed limit (255).<br>";
-		 		valid = false;
-		 	}
+		 if (moreInfo == null) {
+			    moreInfo = "";
+			}
+
+			if (moreInfo.length() > 255) {
+			    message += "Information characters exceed limit (255).<br>";
+			    valid = false;
+			}
 		
 		 
 		 if (!valid) {
 
 			    request.setAttribute("message", message);
 
-			    request.getRequestDispatcher("workForm.jsp") .forward(request, response);
+			    request.getRequestDispatcher("insertWorkPage.jsp") .forward(request, response);
 
 			    return;
 			}
@@ -235,9 +277,12 @@ String action=request.getServletPath();
 		 
 		 Work work = new Work(workType,constructionAddress,chargeCost,paidCharge,moreInfo);
 		
-		 // Αν δεν ειχα το cascade θα χρειαζοταν και αυτη η εντολη τωρα εφοσον γινεται update  customer ροσθετεται και τοwork  workDao.saveWork(work);
-		 customer.addWork(work);
-		 customerDao.updateCustomer(customer);
+		// Αν δεν ειχα το cascade θα χρειαζοταν και αυτη η εντολη τωρα εφοσον γινεται update  customer ροσθετεται και τοwork  workDao.saveWork(work);
+		/*πανω λαμβανω τον customer στην σειρα 151 αλλα κλεινει το σεσσιον ετσι λογω του lazy strategy του hibernate μου πεταει ερρορ καθως δεν βρισκει την λιστα 
+		  για αυτο στελνω το idcustomer kai to work sto idio session stin methodo pou dhmiourgisa mesa sto customerDao */ 
+		 // customer.addWork(work);
+		Customer customer= customerDao.addWorkToCustomer(customerId, work);
+		customerDao.updateCustomer(customer);
 		
 		 RequestDispatcher dispatcher = request.getRequestDispatcher("logedinpage.jsp");
 		 request.setAttribute("customer", customer);
@@ -247,13 +292,13 @@ String action=request.getServletPath();
 	}
 	
 	private void showEditWorkForm(HttpServletRequest request, HttpServletResponse response)throws SQLException, ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
+		int id = Integer.parseInt(request.getParameter("workId"));
 		Work existingWork = workDao.getWorkbyId(id);
 		
 		 String customerId = request.getParameter("customerId");
          request.setAttribute("customerId", customerId);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WorkFromPage.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("insertWorkPage.jsp");
 		request.setAttribute("work", existingWork);
 		dispatcher.forward(request, response);
 
@@ -268,8 +313,6 @@ String action=request.getServletPath();
 		int id = Integer.parseInt(request.getParameter("workId"));
 		Work work =workDao.getWorkbyId(id);
 		
-		int customerid=Integer.parseInt(request.getParameter("customerId"));
-		Customer customer=customerDao.getCustomerbyId(customerid);
 		
 		String workType = request.getParameter("workType");
 		 if(workType==null || workType.trim().isEmpty()) {
@@ -277,7 +320,7 @@ String action=request.getServletPath();
 			  valid = false;
 
 		 }
-		 else if (workType.matches(".*\\d.*") || workType.length()<2 || workType.length()>30  ) {
+		 else if (!workType.matches("[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\\s]{2,30}") ) {
 		     	message += "Please insert a valid work type (Only Characters Allowed, between 2-30 characters)<br>";
 		     	valid = false;
 		     }
@@ -294,7 +337,7 @@ String action=request.getServletPath();
 		 	}
 		 
 		String constructionPostcode=request.getParameter("constructionPostcode");
-		if (!constructionPostcode.matches("\\d{5}")||constructionPostcode == null) {
+		if (constructionPostcode == null || !constructionPostcode.matches("\\d{5}")) {
 		    message += "Construction postcode must contain exactly 5 digits.<br>";
 		    valid = false;
 		}
@@ -366,17 +409,21 @@ String action=request.getServletPath();
 		 
 		
 		String moreInfo=request.getParameter("moreInfo");
-		if (moreInfo.length()>255) {
-	     	message += "Information characters exceed limit (255).<br>";
-	 		valid = false;
-	 	}
+		if (moreInfo == null) {
+		    moreInfo = "";
+		}
+
+		if (moreInfo.length() > 255) {
+		    message += "Information characters exceed limit (255).<br>";
+		    valid = false;
+		}
 		
 		
 		if (!valid) {
 
 		    request.setAttribute("message", message);
 
-		    request.getRequestDispatcher("workForm.jsp") .forward(request, response);
+		    request.getRequestDispatcher("insertWorkPage.jsp") .forward(request, response);
 
 		    return;
 		}
@@ -399,6 +446,8 @@ String action=request.getServletPath();
 		
 		 workDao.updateWork(work);
 		
+		 int customerid=Integer.parseInt(request.getParameter("customerId"));
+		 Customer customer=customerDao.getCustomerbyId(customerid);
 		
 		
 		 RequestDispatcher dispatcher = request.getRequestDispatcher("logedinpage.jsp");

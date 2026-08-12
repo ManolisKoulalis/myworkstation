@@ -84,7 +84,7 @@ public class WorkDao {
 	
 	
 
-	public void deleteWork(int id) throws SQLException {
+	public void deleteWork(int id)  {
 		
 		Transaction transaction=null;
 		
@@ -117,7 +117,7 @@ public class WorkDao {
 				// start a transaction
 				transaction = session.beginTransaction();
 			
-				session.update(work);
+				session.merge(work);
 				// commit transaction
 				transaction.commit();
 			} catch (Exception e) {

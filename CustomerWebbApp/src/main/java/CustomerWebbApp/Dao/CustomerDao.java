@@ -26,6 +26,15 @@ public class CustomerDao {
 					.setParameter("username", username)
 					.setParameter("password", password)
 					.uniqueResult();
+			
+    /* εδω φορτωνω και την λιστα καθως στο logedinpage πεταει ερρορ http status 500  εξετιας του lazy strategy που χρησιμοποιει το hibernate
+	μεταξυ της συσχετισης των κλασεων customer-work που αφορα το worklist, ετσι δεν φορτονεται απο την αρρχη το worklist και   
+	sτο login φορτωνεται ο customer αλλα οχι το worklisτ και με το που γινει η διαδικασια login κλεινει το session 
+	και οταν φορτωθει η επομενη σελιδα ζηταει το worklist  αλλα το προηγουμενο session εχει ηδη κλεισει οποτε εχουμε τον customer χωρις το worklist  */
+			if (customer != null) {
+	            customer.getWorklist().size();
+	        }
+			
 			transaction.commit();
 			
 		} catch (Exception e) {
@@ -69,7 +78,8 @@ public class CustomerDao {
 		try(Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
 			// load the object
-			 customer=(Customer) session.get(Customer.class,id);			
+			 customer=(Customer) session.get(Customer.class,id);	
+			 customer.getWorklist().size();
 			 transaction.commit();
 		
 		} catch (Exception e) {
@@ -157,6 +167,86 @@ public class CustomerDao {
 			}
 			e.printStackTrace();
 		}
+	}
+	
+	
+	
+	
+	public Customer getCustomerbyAfm(String afm) {
+		
+		Transaction transaction = null;
+		Customer customer=null;
+		
+		try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+			transaction = session.beginTransaction();
+			// load the object
+			 customer=(Customer)session.createQuery("from Customer where afm=:afm", Customer.class)
+						.setParameter("afm", afm)
+						 .uniqueResult();			
+			 transaction.commit();
+		
+		} catch (Exception e) {
+			 if (transaction != null) {
+		            transaction.rollback();
+		        }
+			e.printStackTrace();
+		
+		}
+		return customer; 
+	}
+	
+	
+	public Customer getCustomerByUsername(String username) {
+		
+		Transaction transaction = null;
+		Customer customer=null;
+		
+		try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+			transaction = session.beginTransaction();
+			// load the object
+			 customer=(Customer)session.createQuery("from Customer where username=:username", Customer.class)
+						.setParameter("username", username)
+						.uniqueResult();			
+			 transaction.commit();
+		
+		} catch (Exception e) {
+			 if (transaction != null) {
+		            transaction.rollback();
+		        }
+			e.printStackTrace();
+		
+		}
+		return customer; 
+	}
+	
+	
+	public Customer addWorkToCustomer(int customerId, Work work) {
+
+	    Transaction transaction = null;
+	    Customer customer = null;
+
+	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+	        transaction = session.beginTransaction();
+
+	        customer = session.get(Customer.class, customerId);
+
+	        if (customer != null) {
+	            customer.addWork(work);
+	        }
+
+	        transaction.commit();
+
+	    } catch (Exception e) {
+
+	        if (transaction != null) {
+	            transaction.rollback();
+	        }
+
+	        e.printStackTrace();
+	    }
+
+	    return customer;
 	}
 	
 	

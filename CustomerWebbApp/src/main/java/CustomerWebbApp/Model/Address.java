@@ -5,7 +5,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.Table;
 
 @Embeddable
-@Table(name="addresses")
 public class Address {
 	
 	private String name;

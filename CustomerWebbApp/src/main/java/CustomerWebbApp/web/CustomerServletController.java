@@ -19,17 +19,28 @@ import CustomerWebbApp.Model.Address;
 import CustomerWebbApp.Model.Customer;
 
 
-@WebServlet("/")
+@WebServlet(urlPatterns = {
+	    "/register",
+	    "/editCustomer",
+	    "/update",
+	    "/delete",
+	    "/displayCustomers",
+	    "/insert",
+	    "/loginpage",
+	    "/loginCustomer",
+	    "/indexpage"
+	    
+	})
 public class CustomerServletController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	private CustomerDao customerDao;
-	private WorkDao workDao;
+	
 	
 	public void init() {
 	       
 		customerDao= new CustomerDao();
-		workDao= new WorkDao();
+	
 	    }
 	
 	
@@ -39,6 +50,9 @@ public class CustomerServletController extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("UTF-8");
+	    response.setCharacterEncoding("UTF-8");
+
 		doGet(request, response);
 	}
 	
@@ -74,6 +88,9 @@ public class CustomerServletController extends HttpServlet {
 			case "/loginpage":
 				showloginpage(request,response);
 				break;
+			case "/indexpage":
+				response.sendRedirect("index.jsp");
+				break;
 			default:
 				response.sendRedirect("index.jsp");
 				break;
@@ -101,8 +118,10 @@ public class CustomerServletController extends HttpServlet {
 		String password=request.getParameter("password");
 		customer=customerDao.loginmethod(username,password);
 		if (customer==null)	{
-			request.setAttribute("message",
-		            "Wrong username or password");
+			request.setAttribute("message","Wrong username or password");
+			
+			request.getRequestDispatcher("loginpage.jsp") .forward(request, response);
+		   return;
 		}
 		else {
 			
@@ -110,7 +129,8 @@ public class CustomerServletController extends HttpServlet {
 			//HttpSession session = request.getSession();
 			//session.setAttribute("loggedCustomer", customer);
 			request.setAttribute("customer", customer);
-		    response.sendRedirect("logedinCustomer.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("logedinpage.jsp");
+			dispatcher.forward(request, response);
 		}
 		
 
@@ -119,11 +139,11 @@ public class CustomerServletController extends HttpServlet {
 
 	public void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException,ServletException{
 		
-		int id= Integer.parseInt(request.getParameter("id"));
+		int id= Integer.parseInt(request.getParameter("customerId"));
 		customerDao.deleteCustomer(id);
 		List<Customer> customerlist = customerDao.getCustomerList();
 		request.setAttribute("customerlist",customerlist); 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("displayCustomers.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("listofcustomer.jsp");
 		dispatcher.forward(request, response);
 		
 	}
@@ -132,7 +152,7 @@ public class CustomerServletController extends HttpServlet {
 		
 		 List<Customer> customerlist = customerDao.getCustomerList();
 		 request.setAttribute("customerlist",customerlist); 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("displayCustomers.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("listofcustomer.jsp");
 		dispatcher.forward(request, response);
 		
 	}
@@ -170,9 +190,24 @@ public class CustomerServletController extends HttpServlet {
 	}
 	
 	
+	 String afm=request.getParameter("afm");
+		
+		if (afm == null || afm.trim().isEmpty() || !afm.matches("\\d{9}")) {
+		    message += "AFM must contain exactly 9 digits.<br>";
+		    valid = false;
+		}else {
+		    Customer existing = customerDao.getCustomerbyAfm(afm);
+
+		    if (existing != null) {
+		        message += "AFM already exists.<br>";
+		        valid = false;
+		    }
+		}
+	
+	
 	 
 	String gender=request.getParameter("gender");	
-	 if (!gender.equals("Male") && !gender.equals("Female")) {
+	 if (gender == null ||!gender.equals("Male") && !gender.equals("Female")) {
  		message += "Please select a valid gender (Male or Female)<br>";
  		valid = false;
  	}
@@ -198,10 +233,11 @@ public class CustomerServletController extends HttpServlet {
 	
 	
 	String workPostcode= request.getParameter("workPostcode");
-	if (!workPostcode.matches("\\d{5}")||workPostcode == null ) {
+	if (workPostcode == null || !workPostcode.matches("\\d{5}") ) {
 	    message += "Work postcode must contain exactly 5 digits.<br>";
 	    valid = false;
 	}
+	
 	
 	String workAddressName=request.getParameter("workAddressName");
 	if (workAddressName == null || workAddressName.trim().isEmpty()) {
@@ -216,7 +252,7 @@ public class CustomerServletController extends HttpServlet {
 	}
 	
 	String homePostcode= request.getParameter("homePostcode");
-	  if (!homePostcode.matches("\\d{5}")|| workPostcode  == null ) {
+	  if ( homePostcode  == null || !homePostcode.matches("\\d{5}") ) {
 		    message += "Home postcode must contain exactly 5 digits.<br>";
 		    valid = false;
 		}
@@ -248,18 +284,31 @@ public class CustomerServletController extends HttpServlet {
 
 	    message += "Username must be between 4 and 20 characters.<br>";
 	    valid = false;
+	}else {
+		Customer existing = customerDao.getCustomerByUsername(username);
+
+		if (existing != null) {
+		    message += "Username already exists.<br>";
+		    valid = false;
+		}
+		
 	}
 	
+	
+	
+	
+	
 	String password=request.getParameter("password");
-	if (password == null || password.trim().isEmpty() || password.length() < 8) {
+	if (password == null || password.trim().isEmpty() || password.length() < 8 ||  password.length() > 30) {
 	    message += "Password must be at least 8 characters.<br>";
 	    valid = false;
 	}
+	
 
-	 if (valid==false) {
+	 if (!valid) {
 	       	request.setAttribute("message", message);
-	       	request.getRequestDispatcher("/register.jsp").forward(request, response);
-		        return;
+	       	request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+		       return;
 	       }
 		
 	 Address homeAddress= new Address();
@@ -269,7 +318,7 @@ public class CustomerServletController extends HttpServlet {
 		workAddress.setName(workAddressName);
 		workAddress.setPostcode(workPostcode);
 	
-	Customer customer= new Customer(name,surname,gender,birthdate,workAddress,homeAddress,moreInfo,username,password);
+	Customer customer= new Customer(name,surname,gender,afm,birthdate,workAddress,homeAddress,moreInfo,username,password);
 	
 	customerDao.saveCustomer(customer);
 	
@@ -280,16 +329,16 @@ public class CustomerServletController extends HttpServlet {
 
 	public void showRegisterForm(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException,ServletException{
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("registercustomer.jsp");
 		dispatcher.forward(request, response);
 		
 	}
 	
 	private void showEditRegisterForm(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
+		int id = Integer.parseInt(request.getParameter("customerId"));
 		Customer existingCustomer = customerDao.getCustomerbyId(id);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("registercustomer.jsp");
 		request.setAttribute("customer", existingCustomer);
 		dispatcher.forward(request, response);
 
@@ -301,7 +350,7 @@ public class CustomerServletController extends HttpServlet {
 		String message = "";
 	 	boolean valid = true;
 		
-		int id = Integer.parseInt(request.getParameter("id"));
+		int id = Integer.parseInt(request.getParameter("customerId"));
 		
 		String name = request.getParameter("name");
 		if (name == null || name.trim().isEmpty()) {
@@ -322,7 +371,7 @@ public class CustomerServletController extends HttpServlet {
 		    message += "Surname is required.<br>";
 		    valid = false;
 
-		} else if (surname.matches(".*\\d.*") || surname.length() < 2|| surname.length() > 30) {
+		} else if (surname.matches(".*\\d.*") || surname.length() < 2 || surname.length() > 30) {
 
 		    message += "Please insert a valid surname (Only Characters Allowed, between 2-30 characters)<br>";
 		    valid = false;
@@ -330,18 +379,40 @@ public class CustomerServletController extends HttpServlet {
 		
 		
 		String gender=request.getParameter("gender");
-		 if (!gender.equals("Male") && !gender.equals("Female")) {
+		 if (gender==null || !gender.equals("Male") && !gender.equals("Female")) {
 		 		message += "Please select a valid gender (Male or Female)<br>";
 		 		valid = false;
 		 	}
 		
+		 String afm=request.getParameter("afm");
+		
+			if (afm == null || afm.trim().isEmpty() || !afm.matches("\\d{9}")) {
+			    message += "AFM must contain exactly 9 digits.<br>";
+			    valid = false;
+			}else {
+				Customer existing = customerDao.getCustomerbyAfm(afm);
+
+				if (existing != null && existing.getId() != id) {
+				    message += "AFM already exists.<br>";
+				    valid = false;
+				}
+			}
+		  
 		 
 		String username=request.getParameter("username");
 		if (username == null || username.trim().isEmpty()  || username.length() < 4 || username.length() > 20) {
 
 		    message += "Username must be between 4 and 20 characters.<br>";
 		    valid = false;
+		}else {
+			Customer existing = customerDao.getCustomerByUsername(username);
+
+			if (existing != null && existing.getId() != id) {
+			    message += "Username already exists.<br>";
+			    valid = false;
+			}
 		}
+	  
 		
 		
 		String password=request.getParameter("password");
@@ -389,7 +460,7 @@ public class CustomerServletController extends HttpServlet {
 		    valid = false;
 		}
 		 
-		String workAddressPost=request.getParameter("workAddressPost");
+		String workAddressPost=request.getParameter("workPostcode");
 		if (workAddressPost == null || !workAddressPost.matches("\\d{5}")) {
 
 		    message += "Work postcode must contain exactly 5 digits.<br>";
@@ -408,7 +479,7 @@ public class CustomerServletController extends HttpServlet {
 		    valid = false;
 		}
 	
-		 String homeAddressPost=request.getParameter("homeAddressPost");
+		 String homeAddressPost=request.getParameter("homePostcode");
 		if (homeAddressPost == null || !homeAddressPost.matches("\\d{5}")) {
 
 		    message += "Home postcode must contain exactly 5 digits.<br>";
@@ -419,7 +490,7 @@ public class CustomerServletController extends HttpServlet {
 
 		 if (valid==false) {
 		       	request.setAttribute("message", message);
-		       	request.getRequestDispatcher("/register.jsp").forward(request, response);
+		       	request.getRequestDispatcher("/registercustomer.jsp").forward(request, response);
 			        return;
 		       }
 		 
@@ -441,6 +512,7 @@ public class CustomerServletController extends HttpServlet {
 		την λιστα που μπορει να εχει μεχρι τωρα*/
 		customer.setBirthdate(birthdate);
 		customer.setGender(gender);
+		customer.setAfm(afm);
 		customer.setMoreInfo(moreInfo);
 		customer.setName(name);
 		customer.setPassword(password);
@@ -451,7 +523,8 @@ public class CustomerServletController extends HttpServlet {
 		
 		customerDao.updateCustomer(customer);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("logedin.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("logedinpage.jsp");
+		request.setAttribute("customer", customer);
 		dispatcher.forward(request, response);
 		
 		

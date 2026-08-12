@@ -39,20 +39,23 @@ public class Customer {
 	@Column(name="gender")
 	private String gender;
 	
+	@Column(name="afm", unique=true)
+	private String afm;
+	
 	@Column(name="birthdate")
 	private LocalDate birthdate;
 	
 	
 	@Embedded
 	@AttributeOverrides({
-		@AttributeOverride (name="name", column=@Column(name="Work_Adrress_Name")),
+		@AttributeOverride (name="name", column=@Column(name="Work_Address_Name")),
 		@AttributeOverride (name="postcode", column=@Column(name="Work_Postcode"))
 	})
 	private Address workAddress;
 	
 	@Embedded
 	@AttributeOverrides({
-		@AttributeOverride (name="name", column=@Column(name="Home_Adrress_Name")),
+		@AttributeOverride (name="name", column=@Column(name="Home_Address_Name")),
 		@AttributeOverride (name="postcode", column=@Column(name="Home_Postcode"))
 	})
 	private Address homeAddress;
@@ -60,7 +63,7 @@ public class Customer {
 	@Column(name="more_information")
 	private String moreInfo;
 	
-	@Column(name="username")
+	@Column(name="username",unique=true)
 	private String username;
 	
 	@Column(name="password")
@@ -76,14 +79,19 @@ public class Customer {
 		worklist.add(awork);
 	}
 	
+	public void removeWork(Work work) {
+	    worklist.remove(work);
+	}
+	
 
-	public Customer(int id, String name, String surname, String gender, LocalDate birthdate, Address workAddress,
+	public Customer(int id, String name, String surname, String gender,String afm, LocalDate birthdate, Address workAddress,
 			Address homeAddress, String moreInfo, String username, String password) {
 		
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.gender = gender;
+		this.afm=afm;
 		this.birthdate = birthdate;
 		this.workAddress = workAddress;
 		this.homeAddress = homeAddress;
@@ -93,11 +101,12 @@ public class Customer {
 		
 	}
 
-	public Customer(String name, String surname, String gender, LocalDate birthdate, Address workAddress,
+	public Customer(String name, String surname, String gender,String afm, LocalDate birthdate, Address workAddress,
 			Address homeAddress, String moreInfo, String username, String password) {
 		this.name = name;
 		this.surname = surname;
 		this.gender = gender;
+		this.afm=afm;
 		this.birthdate = birthdate;
 		this.workAddress = workAddress;
 		this.homeAddress = homeAddress;
@@ -198,6 +207,16 @@ public class Customer {
 
 	public void setWorklist(List<Work> worklist) {
 		this.worklist = worklist;
+	}
+
+
+	public String getAfm() {
+		return afm;
+	}
+
+
+	public void setAfm(String afm) {
+		this.afm = afm;
 	}
 	
 	

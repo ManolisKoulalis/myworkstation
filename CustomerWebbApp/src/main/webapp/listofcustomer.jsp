@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+ <%@ page isELIgnored="false" %>
 <meta charset="UTF-8">
 <title>Customer Web Application</title>
 <style><%@include file="WEB-INF/css/style.css"%></style>
@@ -22,8 +23,8 @@
       
         <ul>
             <li><a href="index.jsp"> Αρχική</a></li>
-            <li> <a href="register">Εγγραφή Πελάτη</a> </li>
-            <li> <a href="loginpae">Σύνδεση Πελάτη</a></li>
+            <li> <a href="${pageContext.request.contextPath}/register">Εγγραφή Πελάτη</a> </li>
+            <li> <a href="${pageContext.request.contextPath}/loginpage">Σύνδεση Πελάτη</a></li>
         </ul>
     </nav>
  </header>

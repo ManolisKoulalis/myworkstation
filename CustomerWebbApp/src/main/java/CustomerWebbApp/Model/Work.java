@@ -26,7 +26,7 @@ public class Work {
 	
 	@Embedded
 	@AttributeOverrides({
-		@AttributeOverride (name="name", column=@Column(name="Construction_Adrress_Name")),
+		@AttributeOverride (name="name", column=@Column(name="Construction_Address_Name")),
 		@AttributeOverride (name="postcode", column=@Column(name="Construction_Postcode"))
 	})
 	private Address constructionAddress;
@@ -112,6 +112,9 @@ public class Work {
 		
 	}
 	
+	public double getRemainingCharge() {
+	    return chargeCost - paidCharge;
+	}
 	
 	
 	
