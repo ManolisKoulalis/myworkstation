@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Register New User</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+
+<body>
+
+<header>
+
+    <h2>
+        <a href="/">Simple web project</a>
+    </h2>
+
+    <nav>
+        <ul>
+            <li>
+                <a href="/register.html">Register</a>
+            </li>
+
+            <li>
+                <a href="/users.html">Display Users</a>
+            </li>
+        </ul>
+    </nav>
+
+</header>
+
+
+<h1>Register Form</h1>
+
+
+<p id="message" class="error"></p>
+
+
+
+<form id="registerForm" class="register_form">
+
+    <label for="name"><b>Name:*</b></label>
+    <input type="text" id="name"  placeholder="Enter your name" required>
+
+
+    <label for="surname"><b>Surname:*</b></label>
+    <input type="text" id="surname" placeholder="Enter your surname" required>
+
+
+    <label for="gender"><b>Gender:*</b></label>
+    <select id="gender" required>
+        <option value=""></option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+
+    <label for="birthdate"><b>Birth date:*</b></label>
+    <input type="date" id="birthdate" required>
+
+
+    <label for="workAddressName"><b>Work Address:</b></label>
+    <textarea id="workAddressName" placeholder="Enter your work address"> </textarea>
+
+
+    <label for="workPostcode"><b>Work Post-Code:</b></label>
+    <input type="text" id="workPostcode" placeholder="Enter your work postcode">
+
+
+    <label for="homeAddressName"><b>Home Address:</b></label>
+    <textarea id="homeAddressName" placeholder="Enter your home address"> </textarea>
+
+
+    <label for="homePostcode"><b>Home Post-Code:</b></label>
+    <input type="text" id="homePostcode"  placeholder="Enter your home postcode">
+
+
+    <div class="submit_buttom_container">
+        <input type="submit" class="submit"value="Submit">
+    </div>
+
+</form>
+
+
+<script>
+
+    const form = document.getElementById("registerForm");
+
+    form.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        const user = {
+
+            name: document.getElementById("name").value,
+
+            surname: document.getElementById("surname").value,
+
+            gender: document.getElementById("gender").value,
+
+            birthdate: document.getElementById("birthdate").value,
+
+            homeAddress: {
+                name: document.getElementById("homeAddressName").value,
+                postcode: document.getElementById("homePostcode").value
+            },
+
+            workAddress: {
+                name: document.getElementById("workAddressName").value,
+                postcode: document.getElementById("workPostcode").value
+            }
+        };
+
+
+        fetch("/users", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(user)
+
+        });
+
+    });
+
+</script>
+
+
+</body>
+
+</html>
