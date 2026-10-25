@@ -9,7 +9,7 @@ public class WorkResponseDto {
 
     private Integer id;
     private String workType;
-    private Address constructionAddress;
+    private AddressDto constructionAddress;
     private BigDecimal chargeCost;
     private BigDecimal paidCharge;
     private BigDecimal remainingCharge;
@@ -34,11 +34,11 @@ public class WorkResponseDto {
         this.workType = workType;
     }
 
-    public Address getConstructionAddress() {
+    public AddressDto getConstructionAddress() {
         return constructionAddress;
     }
 
-    public void setConstructionAddress(Address constructionAddress) {
+    public void setConstructionAddress(AddressDto constructionAddress) {
         this.constructionAddress = constructionAddress;
     }
 

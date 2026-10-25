@@ -20,7 +20,7 @@ public class WorkRequestDto {
 
     @NotNull(message = "Η διεύθυνση κατασκευής είναι υποχρεωτική")
     @Valid
-    private Address constructionAddress;
+    private AddressDto constructionAddress;
 
     @NotNull(message = "Το κόστος χρέωσης είναι υποχρεωτικό")
     @DecimalMin(value = "0.00", message = "Το κόστος χρέωσης δεν μπορεί να είναι αρνητικό")
@@ -46,11 +46,11 @@ public class WorkRequestDto {
         this.workType = workType;
     }
 
-    public Address getConstructionAddress() {
+    public AddressDto getConstructionAddress() {
         return constructionAddress;
     }
 
-    public void setConstructionAddress(Address constructionAddress) {
+    public void setConstructionAddress(AddressDto constructionAddress) {
         this.constructionAddress = constructionAddress;
     }
 

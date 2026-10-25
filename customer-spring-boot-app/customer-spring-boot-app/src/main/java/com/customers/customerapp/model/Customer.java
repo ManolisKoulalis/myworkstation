@@ -68,6 +68,13 @@ public class Customer {
 					inverseJoinColumns=@JoinColumn(name="Work_Id"))
 	private ArrayList<Work> worklist;
 
+	public void addWork(Work work) {
+		worklist.add(work);
+	}
+	
+	public void removeWork(Work work) {
+		worklist.remove(work);
+	}
 	
 	//getters and setters
 	public Integer getId() {

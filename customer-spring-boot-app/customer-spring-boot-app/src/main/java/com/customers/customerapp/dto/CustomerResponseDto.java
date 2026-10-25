@@ -15,8 +15,8 @@ public class CustomerResponseDto {
     private String afm;
     private LocalDate birthdate;
 
-    private Address homeAddress;
-    private Address workAddress;
+    private AddressDto homeAddress;
+    private AddressDto workAddress;
 
     private String moreInfo;
     private String username;
@@ -27,7 +27,7 @@ public class CustomerResponseDto {
     
     
     public CustomerResponseDto(String name, String surname, String gender, String afm, LocalDate birthdate,
-			Address homeAddress, Address workAddress, String moreInfo, String username) {
+			AddressDto homeAddress, AddressDto workAddress, String moreInfo, String username) {
 		
 		this.name = name;
 		this.surname = surname;
@@ -90,19 +90,19 @@ public class CustomerResponseDto {
         this.birthdate = birthdate;
     }
 
-    public Address getHomeAddress() {
+    public AddressDto getHomeAddress() {
         return homeAddress;
     }
 
-    public void setHomeAddress(Address homeAddress) {
+    public void setHomeAddress(AddressDto homeAddress) {
         this.homeAddress = homeAddress;
     }
 
-    public Address getWorkAddress() {
+    public AddressDto getWorkAddress() {
         return workAddress;
     }
 
-    public void setWorkAddress(Address workAddress) {
+    public void setWorkAddress(AddressDto workAddress) {
         this.workAddress = workAddress;
     }
 
