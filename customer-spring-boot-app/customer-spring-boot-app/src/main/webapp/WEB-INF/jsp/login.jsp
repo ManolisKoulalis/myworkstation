@@ -31,7 +31,20 @@
         </p>
     </c:if>
     
-    
+    <%--Μηνυμα αλλαγης username --%>
+	 <c:if test="${param.usernameChanged != null}">
+	    <p class="success-message">
+	        Το username άλλαξε επιτυχώς.
+	        Συνδέσου ξανά με το νέο username.
+	    </p>
+	</c:if>
+	
+	<%--Μηνυμα επιτυχημενης διαγραφης χρηστη --%>
+	<c:if test="${param.accountDeleted != null}">
+	    <p class="success-message">
+	        Ο λογαριασμός σου διαγράφηκε επιτυχώς.
+	    </p>
+	</c:if>
 
     <form action="${pageContext.request.contextPath}/login" method="post">
 

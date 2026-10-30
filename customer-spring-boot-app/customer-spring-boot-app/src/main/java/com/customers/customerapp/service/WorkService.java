@@ -179,9 +179,36 @@ public class WorkService {
 		} 
 	 
 	 
+
+@Transactional(readOnly = true)
+public WorkRequestDto getWorkForEdit(Integer workId,Integer customerId) {
+
+    Work work = findWorkByIdAndCustomerId(workId,customerId);
+
+    WorkRequestDto dto = new WorkRequestDto();
+
+    dto.setWorkType(work.getWorkType());
+
+    AddressDto address = new AddressDto();
+
+    address.setStreetName(work.getConstructionAddress().getStreetName());
+
+    address.setPostcode(work.getConstructionAddress().getPostcode());
+
+    dto.setConstructionAddress(address);
+
+    dto.setChargeCost(work.getChargeCost());
+    dto.setPaidCharge(work.getPaidCharge());
+    dto.setMoreInfo(work.getMoreInfo());
+
+    return dto;
+}
+
+	 
+	 
 	// Converters of Entities and Dtos
 	
-	private WorkResponseDto toWorkResponseDto(Work work) {
+	private  WorkResponseDto toWorkResponseDto(Work work) {
 		
 		 
 		WorkResponseDto dto= new WorkResponseDto();

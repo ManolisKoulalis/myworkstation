@@ -199,8 +199,53 @@ public class CustomerService {
 		}	
 			
 			
-			
-			
+
+@Transactional(readOnly = true)
+public CustomerRequestDto getCustomerForEdit(String username) {
+
+    Customer customer = customerRepository.findByUsername(username).orElseThrow(() ->
+                    new IllegalArgumentException(
+                            "Ο πελάτης δεν βρέθηκε."
+                    )
+            );
+
+    CustomerRequestDto dto = new CustomerRequestDto();
+
+    // Προσωπικά στοιχεία
+    dto.setName(customer.getName());
+    dto.setSurname(customer.getSurname());
+    dto.setGender(customer.getGender());
+    dto.setAfm(customer.getAfm());
+    dto.setBirthdate(customer.getBirthdate());
+
+    // Διεύθυνση κατοικίας
+    AddressDto homeAddress = new AddressDto();
+
+    homeAddress.setStreetName(customer.getHomeAddress().getStreetName());
+    homeAddress.setPostcode(customer.getHomeAddress().getPostcode());
+
+    dto.setHomeAddress(homeAddress);
+
+    // Διεύθυνση εργασίας
+    AddressDto workAddress = new AddressDto();
+
+    workAddress.setStreetName(customer.getWorkAddress().getStreetName());
+    workAddress.setPostcode(customer.getWorkAddress().getPostcode());
+
+    dto.setWorkAddress(workAddress);
+
+    // Πρόσθετες πληροφορίες
+    dto.setMoreInfo(customer.getMoreInfo());
+
+    // Στοιχεία σύνδεσης
+    dto.setUsername(customer.getUsername());
+
+    // Δεν επιστρέφουμε τον αποθηκευμένο κωδικό
+    dto.setPassword("");
+
+    return dto;
+}
+
 			
 
 // Μετατροπες απο DTOS σε αντικειμενα Entities και αντιστροφα
