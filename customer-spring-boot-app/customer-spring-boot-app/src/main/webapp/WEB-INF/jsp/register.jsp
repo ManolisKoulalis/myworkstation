@@ -2,214 +2,268 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
-<%@ taglib prefix="form"
-           uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="el">
+
 <head>
     <meta charset="UTF-8">
-    <title>Customer Registration</title>
+
+    <meta name="viewport"  content="width=device-width, initial-scale=1.0">
+
+    <title>Εγγραφή - CustomerApp</title>
+
+    <link rel="stylesheet"
+      href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/style.css">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"></script>
 </head>
-<body>
 
-    <h2>Εγγραφή νέου πελάτη</h2>
+<body class="auth-page">
 
-    <form:form
-        action="${pageContext.request.contextPath}/register"
-        method="post"
-        modelAttribute="customer"
-        <%--με το novalidate ο browser δεν θα εμποδίζει την υποβολή βάσει αυτών(required, minlength, maxlength και pattern). Το validation θα γίνεται στον server --%>
-        novalidate="novalidate">
+    <!-- Navigation Bar -->
+    <nav class="dashboard-nav auth-nav">
 
-        <%-- Γενικά σφάλματα --%>
-        <form:errors path="" cssStyle="color:red;"/>
+        <a class="nav-brand"  href="${pageContext.request.contextPath}/">CustomerApp</a>
 
-        <h3>Προσωπικά στοιχεία</h3>
+        <ul>
+            <li>
+                <a href="${pageContext.request.contextPath}/login">Σύνδεση</a>
+            </li>
 
-        <%-- Όνομα --%>
-        <div>
-            <label for="name">Όνομα:</label>
-            <form:input
-                path="name"
-                id="name"
-                required="required"
-                minlength="3"
-                maxlength="30"
-                pattern="[A-Za-zΑ-Ωα-ωΆΈΉΊΌΎΏάέήίόύώΪΫϊϋΐΰ]+"
-                title="3 έως 30 γράμματα, ελληνικά ή λατινικά, χωρίς αριθμούς"/>
-            <form:errors path="name" cssStyle="color:red;"/>
-        </div>
+            <li>
+                <a class="active" aria-current="page" href="${pageContext.request.contextPath}/register">Εγγραφή</a>
+            </li>
+        </ul>
 
-        <%-- Επώνυμο --%>
-        <div>
-            <label for="surname">Επώνυμο:</label>
-            <form:input
-                path="surname"
-                id="surname"
-                required="required"
-                minlength="3"
-                maxlength="30"
-                pattern="[A-Za-zΑ-Ωα-ωΆΈΉΊΌΎΏάέήίόύώΪΫϊϋΐΰ]+"
-                title="3 έως 30 γράμματα, ελληνικά ή λατινικά, χωρίς αριθμούς"/>
-            <form:errors path="surname" cssStyle="color:red;"/>
-        </div>
+    </nav>
+    
+						  <script>
+						  $(function () {
+							    $("#birthdate").datepicker({
+							        dateFormat: "yy-mm-dd",
+							        changeMonth: true,
+							        changeYear: true,
+							        maxDate: 0,
+							        yearRange: "-100:+0",
+							        showButtonPanel: false
+							    });
+							});
+								</script>
 
-        <%-- Φύλο --%>
-        <div>
-            <label for="gender">Φύλο:</label>
-            <form:select path="gender"
-                         id="gender"
-                         required="required">
+    <main class="auth-container register-container">
 
-                <form:option value="" label="-- Επιλογή --"/>
-                <form:option value="Male" label="Άνδρας"/>
-                <form:option value="Female" label="Γυναίκα"/>
-                <form:option value="Other" label="Άλλο"/>
+        <section class="auth-card register-card">
 
-            </form:select>
-            <form:errors path="gender" cssStyle="color:red;"/>
-        </div>
+            <!-- Επικεφαλίδα -->
+            <header class="auth-header">
 
-        <%-- ΑΦΜ --%>
-        <div>
-            <label for="afm">ΑΦΜ:</label>
-            <form:input path="afm"
-                id="afm"
-                required="required"
-                pattern="[0-9]{9}"
-                maxlength="9"
-                inputmode="numeric"
-                title="Το ΑΦΜ πρέπει να περιέχει ακριβώς 9 ψηφία"/>
-            <form:errors path="afm" cssStyle="color:red;"/>
-        </div>
+                <div class="auth-icon" aria-hidden="true">
+                    &#128100;
+                </div>
 
-        <%-- Ημερομηνία γέννησης --%>
-        <div>
-            <label for="birthdate">Ημερομηνία γέννησης:</label>
-            <form:input path="birthdate"
-                id="birthdate"
-                type="date"
-                required="required"/>
+                <h1>Δημιουργία Λογαριασμού</h1>
 
-            <form:errors path="birthdate"
-                    cssStyle="color:red;"/>
+                <p>
+                    Συμπληρώστε τα στοιχεία σας
+                    για να εγγραφείτε στο CustomerApp.
+                </p>
 
-            <form:errors path="birthdateWithinAllowedRange"
-                cssStyle="color:red;"/>
-        </div>
+            </header>
 
-        <h3>Διεύθυνση κατοικίας</h3>
+            <!-- Φόρμα εγγραφής -->
+            <form:form modelAttribute="customer" action="${pageContext.request.contextPath}/register" method="post" cssClass="register-form"
+                novalidate="novalidate">
 
-        <%-- Διεύθυνση κατοικίας --%>
-        <div>
-            <label for="homeName">Διεύθυνση:</label>
-            <form:input path="homeAddress.name"
-                id="homeName"
-                required="required"
-                minlength="3"
-                maxlength="100"
-                title="Η διεύθυνση πρέπει να έχει 3 έως 100 χαρακτήρες"/>
-            <form:errors path="homeAddress.name"
-                cssStyle="color:red;"/>
-        </div>
+                <!-- Γενικά σφάλματα -->
+                <form:errors path="" cssClass="form-error global-form-error" element="div"/>
 
-        <%-- ΤΚ κατοικίας --%>
-        <div>
-            <label for="homePostcode"> Ταχυδρομικός κώδικας:</label>
+                <!-- Προσωπικά στοιχεία -->
+                <fieldset class="form-section">
 
-            <form:input path="homeAddress.postcode"
-                id="homePostcode"
-                required="required"
-                pattern="[0-9]{5}"
-                maxlength="5"
-                inputmode="numeric"
-                title="Ο ταχυδρομικός κώδικας πρέπει να έχει 5 ψηφία"/>
+                    <legend>Προσωπικά Στοιχεία</legend>
 
-            <form:errors path="homeAddress.postcode"
-                cssStyle="color:red;"/>
-        </div>
+                    <div class="form-grid">
 
-        <h3>Διεύθυνση εργασίας</h3>
+                        <div class="form-group">
 
-        <%-- Διεύθυνση εργασίας --%>
-        <div>
-            <label for="workName">Διεύθυνση:</label>
-            <form:input path="workAddress.name"
-                id="workName"
-                required="required"
-                minlength="3"
-                maxlength="100"
-                title="Η διεύθυνση πρέπει να έχει 3 έως 100 χαρακτήρες"/>
+                            <form:label path="name">Όνομα</form:label>
+                            <form:input path="name" placeholder="Εισάγετε το όνομά σας"/>
+                            <form:errors path="name" cssClass="form-error" element="div"/>
 
-            <form:errors path="workAddress.name"
-                cssStyle="color:red;"/>
-        </div>
+                        </div>
 
-        <%-- ΤΚ εργασίας --%>
-        <div>
-            <label for="workPostcode">Ταχυδρομικός κώδικας:</label>
+                        <div class="form-group">
 
-            <form:input path="workAddress.postcode"
-                id="workPostcode"
-                required="required"
-                pattern="[0-9]{5}"
-                maxlength="5"
-                inputmode="numeric"
-                title="Ο ταχυδρομικός κώδικας πρέπει να έχει 5 ψηφία"/>
+                            <form:label path="surname">Επώνυμο</form:label>
+                            <form:input path="surname" placeholder="Εισάγετε το επώνυμό σας"/>
+                            <form:errors path="surname" cssClass="form-error" element="div"/>
 
-            <form:errors path="workAddress.postcode"
-                cssStyle="color:red;"/>
-        </div>
+                        </div>
 
-        <h3>Περισσότερες πληροφορίες</h3>
+                        <div class="form-group">
 
-        <div>
-            <label for="moreInfo">Πληροφορίες:</label>
-            <form:textarea path="moreInfo"
-                id="moreInfo"
-                rows="4"
-                maxlength="1000"/>
+                            <form:label path="gender">Φύλο</form:label>
+                            <form:select path="gender" cssClass="form-select">
+	
+		     					 <form:option value="" label="Επιλέξτε φύλο"/>
+		     					 <form:option value="Male" label="Άνδρας"/>
+								 <form:option value="Female" label="Γυναίκα"/>
+								 <form:option value="Other" label="Άλλο"/>
 
-            <form:errors path="moreInfo"
-                cssStyle="color:red;"/>
-        </div>
+    					   </form:select>
+                            <form:errors path="gender" cssClass="form-error" element="div"/>
 
-        <h3>Στοιχεία σύνδεσης</h3>
+                        </div>
 
-        <%-- Username --%>
-        <div>
-            <label for="username">Username:</label>
+                        <div class="form-group">
 
-            <form:input path="username"
-                id="username"
-                required="required"
-                minlength="5"
-                maxlength="30"
-                pattern="[A-Za-z0-9]+([._][A-Za-z0-9]+)*"
-                title="5 έως 30 χαρακτήρες: λατινικά γράμματα, αριθμοί και τελείες ή κάτω παύλες ανάμεσα σε ομάδες χαρακτήρων"/>
+                            <form:label path="afm">Α.Φ.Μ.</form:label>
+                           <form:input path="afm" placeholder="Εισάγετε το ΑΦΜ σας"/>
+                            <form:errors path="afm" cssClass="form-error" element="div"/>
 
-            <form:errors path="username" cssStyle="color:red;"/>
-        </div>
+                        </div>
 
-        <%-- Password --%>
-        <div>
-            <label for="password">Password:</label>
-            <form:password path="password"
-                id="password"
-                required="required"/>
+                        <div class="form-group">
 
-            <form:errors path="password" cssStyle="color:red;"/>
-        </div>
+                            <form:label path="birthdate">Ημερομηνία Γέννησης</form:label>
+                            <form:input  path="birthdate"
+									      id="birthdate"
+									      type="text"
+									      autocomplete="off"
+									      readonly="true" />
+                            <form:errors path="birthdate" cssClass="form-error" element="div"/>
 
-        <button type="submit">Εγγραφή</button>
+                        </div>
 
-    </form:form>
+                    </div>
 
-    <p>
-        Έχεις ήδη λογαριασμό;
-        <a href="${pageContext.request.contextPath}/login">Σύνδεση</a>
-    </p>
+                </fieldset>
+
+                <!-- Διευθύνσεις -->
+                <fieldset class="form-section">
+
+                    <legend>Διευθύνσεις</legend>
+
+                    <h3 class="form-subsection-title">
+                        Διεύθυνση Κατοικίας
+                    </h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <form:label path="homeAddress.streetName">Οδός / Διεύθυνση</form:label>
+                            <form:input path="homeAddress.streetName" placeholder="Διεύθυνση κατοικίας"/>
+                            <form:errors path="homeAddress.streetName" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <form:label path="homeAddress.postcode">Ταχυδρομικός Κώδικας</form:label>
+                            <form:input path="homeAddress.postcode" placeholder="Τ.Κ. κατοικίας"/>
+                            <form:errors path="homeAddress.postcode" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                    </div>
+
+                    <h3 class="form-subsection-title">
+                        Διεύθυνση Εργασίας
+                    </h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <form:label path="workAddress.streetName">Οδός / Διεύθυνση</form:label>
+                            <form:input path="workAddress.streetName" placeholder="Διεύθυνση εργασίας"/>
+                            <form:errors path="workAddress.streetName" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <form:label path="workAddress.postcode">Ταχυδρομικός Κώδικας</form:label>
+                            <form:input path="workAddress.postcode" placeholder="Τ.Κ. εργασίας"/>
+                            <form:errors path="workAddress.postcode" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+                <!-- Στοιχεία λογαριασμού -->
+                <fieldset class="form-section">
+
+                    <legend>Στοιχεία Λογαριασμού</legend>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <form:label path="username">Username</form:label>
+                            <form:input path="username" autocomplete="username" placeholder="Επιλέξτε username"/>
+                            <form:errors path="username" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <form:label path="password">Password</form:label>
+                            <form:password path="password" autocomplete="new-password" placeholder="Επιλέξτε κωδικό"/>
+                            <form:errors path="password" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+                <!-- Επιπλέον πληροφορίες -->
+                <fieldset class="form-section">
+
+                    <legend>Επιπλέον Πληροφορίες</legend>
+
+                    <div class="form-group">
+
+                        <form:label path="moreInfo">Παρατηρήσεις</form:label>
+                        <form:textarea path="moreInfo" rows="4" placeholder="Προαιρετικές πληροφορίες"/>
+                        <form:errors path="moreInfo" cssClass="form-error" element="div"/>
+
+                    </div>
+
+                </fieldset>
+
+                <!-- Κουμπί εγγραφής -->
+                <div class="form-actions">
+                    <button type="submit"   class="btn btn-primary auth-submit">Δημιουργία Λογαριασμού</button>
+                </div>
+
+            </form:form>
+
+            <!-- Σύνδεσμος σύνδεσης -->
+            <footer class="auth-footer">
+
+                <p>
+                    Έχετε ήδη λογαριασμό;
+                    <a href="${pageContext.request.contextPath}/login">Σύνδεση</a>
+                </p>
+
+            </footer>
+
+        </section>
+
+    </main>
 
 </body>
 </html>

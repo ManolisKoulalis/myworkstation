@@ -1,0 +1,1575 @@
+
+@charset "UTF-8";
+
+/* =========================================
+   1. ΧΡΩΜΑΤΑ ΚΑΙ ΒΑΣΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ
+========================================= */
+
+:root {
+    --primary: #483C46;
+    --primary-dark: #39223F;
+    --primary-light: #EEE1F7;
+
+    --accent: #4C9B25;
+    --accent-hover: #3D821B;
+    --accent-light: #E4F1DA;
+
+    --background: #F5F2FF;
+    --surface: #FFFFFF;
+
+    --text: #24233A;
+    --text-muted: #667085;
+
+    --border: #D9DCE8;
+
+    --danger: #C83D4D;
+    --danger-hover: #A92C3B;
+
+    --success: #2F8058;
+    --success-light: #E8F5EC;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    --shadow:
+        0 8px 24px rgba(49, 35, 78, 0.10);
+
+    --shadow-lg:
+        0 14px 35px rgba(49, 35, 78, 0.14);
+}
+
+
+/* =========================================
+   2. RESET ΚΑΙ ΒΑΣΙΚΗ ΜΟΡΦΟΠΟΙΗΣΗ
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        linear-gradient(
+            135deg,
+            #F8F6FF 0%,
+            #F0ECFF 100%
+        );
+
+    line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+p {
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 2rem;
+    color: var(--primary-dark);
+}
+
+h2 {
+    font-size: 1.35rem;
+    color: var(--primary-dark);
+}
+
+h3 {
+    font-size: 1.05rem;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+:focus-visible {
+    outline: 3px solid #A98BD5;
+    outline-offset: 3px;
+}
+
+
+/* =========================================
+   3. NAVIGATION BAR
+========================================= */
+
+.dashboard-nav {
+    min-height: 64px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 10px 36px;
+
+    background:
+        linear-gradient(
+            100deg,
+            var(--primary-dark),
+            #63316A
+        );
+
+    color: white;
+
+    box-shadow:
+        0 3px 12px rgba(35, 20, 50, 0.12);
+}
+
+.nav-brand {
+    display: inline-flex;
+    align-items: center;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+
+    color: white;
+
+    white-space: nowrap;
+}
+
+.dashboard-nav ul {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.dashboard-nav li {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-nav li a,
+.dashboard-nav li button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 42px;
+
+    padding: 10px 16px;
+
+    border: 0;
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.dashboard-nav li a:hover,
+.dashboard-nav li button:hover {
+    background: rgba(255, 255, 255, 0.13);
+}
+
+.dashboard-nav li a.active {
+    background: var(--accent);
+    color: white;
+}
+
+.dashboard-nav li a.active:hover {
+    background: var(--accent-hover);
+}
+
+.dashboard-nav form {
+    margin: 0;
+}
+
+.auth-nav {
+    width: 100%;
+}
+
+
+/* =========================================
+   4. ΚΟΙΝΗ ΔΙΑΤΑΞΗ ΣΕΛΙΔΩΝ
+========================================= */
+
+.main-content {
+    width: min(1320px, calc(100% - 48px));
+
+    margin: 0 auto;
+    padding: 34px 0 56px;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    margin-bottom: 6px;
+
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.page-header p {
+    margin-bottom: 0;
+
+    color: var(--text-muted);
+}
+
+.card {
+    min-width: 0;
+
+    padding: 24px;
+
+    background: var(--surface);
+
+    border: 1px solid rgba(215, 211, 233, 0.8);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    flex-wrap: wrap;
+    gap: 14px;
+
+    margin-bottom: 22px;
+}
+
+.card-header h2 {
+    margin: 0;
+}
+
+.cards-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 24px;
+
+    margin-bottom: 28px;
+}
+
+
+/* =========================================
+   5. ΚΟΥΜΠΙΑ
+========================================= */
+
+.btn,
+.submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 18px;
+
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.3;
+
+    text-align: center;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn:hover,
+.submit:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active,
+.submit:active {
+    transform: translateY(0);
+}
+
+.btn-primary,
+.submit {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-primary:hover,
+.submit:hover {
+    background: var(--accent-hover);
+}
+
+.btn-success {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-success:hover {
+    background: var(--accent-hover);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: var(--danger-hover);
+}
+
+.btn-secondary {
+    background: #F8F9FC;
+
+    color: #475467;
+
+    border-color: #BCC3D2;
+}
+
+.btn-secondary:hover {
+    background: #EBEDF3;
+}
+
+
+/* =========================================
+   6. PROFILE - ΣΤΟΙΧΕΙΑ ΠΕΛΑΤΗ
+========================================= */
+
+.details-list {
+    margin: 0;
+}
+
+.detail-row {
+    display: grid;
+
+    grid-template-columns: 180px minmax(0, 1fr);
+
+    gap: 16px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #ECEEF4;
+}
+
+.detail-row:last-child {
+    border-bottom: 0;
+}
+
+.detail-row dt {
+    color: var(--text-muted);
+
+    font-size: 0.93rem;
+    font-weight: 600;
+}
+
+.detail-row dd {
+    min-width: 0;
+
+    margin: 0;
+
+    font-weight: 600;
+
+    overflow-wrap: anywhere;
+}
+
+.address-item {
+    padding: 14px 0;
+
+    border-bottom: 1px solid #ECEEF4;
+}
+
+.address-item:last-child {
+    border-bottom: 0;
+}
+
+.address-item h3 {
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    padding: 6px 12px;
+
+    border-radius: 6px;
+
+    background: var(--accent-light);
+
+    color: #315D22;
+}
+
+.address-item p {
+    margin-bottom: 6px;
+
+    color: var(--text-muted);
+}
+
+
+/* =========================================
+   7. PROFILE - ΠΙΝΑΚΑΣ ΕΡΓΑΣΙΩΝ
+========================================= */
+
+#works {
+    margin-top: 8px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.works-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: white;
+
+    font-size: 0.91rem;
+}
+
+.works-table thead {
+    background: var(--accent-light);
+}
+
+.works-table th {
+    padding: 15px 14px;
+
+    color: #315D22;
+
+    font-weight: 700;
+    text-align: left;
+
+    white-space: nowrap;
+
+    border-bottom: 1px solid #CFDFCA;
+}
+
+.works-table td {
+    padding: 16px 14px;
+
+    color: var(--text);
+
+    vertical-align: middle;
+
+    border-bottom: 1px solid #ECEEF4;
+}
+
+.works-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.works-table tbody tr:hover {
+    background: #FAFBFD;
+}
+
+/*
+   Το υπόλοιπο έχει κανονικό χρώμα.
+   Δεν υπάρχει ειδικό πράσινο styling
+   όταν η τιμή είναι μηδέν.
+*/
+
+.table-actions {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.table-actions form {
+    margin: 0;
+}
+
+.table-actions .btn {
+    padding: 8px 12px;
+
+    font-size: 0.85rem;
+
+    white-space: nowrap;
+}
+
+.empty-message {
+    margin: 0;
+
+    padding: 26px 18px;
+
+    border-radius: var(--radius-md);
+
+    background: #F8F9FC;
+
+    color: var(--text-muted);
+
+    text-align: center;
+}
+
+.account-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 28px;
+}
+
+.account-actions form {
+    margin: 0;
+}
+
+
+/* =========================================
+   8. LOGIN / REGISTER
+========================================= */
+
+.auth-page {
+    min-height: 100vh;
+}
+
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    padding: 48px 20px 70px;
+}
+
+.auth-card {
+    width: min(100%, 620px);
+
+    padding: 36px;
+
+    background: white;
+
+    border: 1px solid #E1DEEF;
+    border-radius: 24px;
+
+    box-shadow: var(--shadow-lg);
+}
+
+.auth-header {
+    margin-bottom: 30px;
+
+    text-align: center;
+}
+
+.auth-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 66px;
+    height: 66px;
+
+    margin: 0 auto 18px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7C32A2,
+            #9B3FC4
+        );
+
+    color: white;
+
+    font-size: 2rem;
+}
+
+.auth-header h1 {
+    margin-bottom: 10px;
+
+    font-size: 2rem;
+}
+
+.auth-header h2 {
+    margin-bottom: 8px;
+
+    font-size: 1.4rem;
+}
+
+.auth-header p {
+    margin-bottom: 0;
+
+    color: var(--text-muted);
+}
+
+.auth-form,
+.register-form,
+.edit-form,
+.work-form {
+    width: 100%;
+}
+
+.auth-submit {
+    width: 100%;
+}
+
+.auth-footer {
+    margin-top: 28px;
+    padding-top: 24px;
+
+    border-top: 1px solid var(--border);
+
+    text-align: center;
+}
+
+.auth-footer p {
+    margin: 0;
+
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: #71318A;
+
+    font-weight: 700;
+
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.auth-footer a:hover {
+    color: var(--primary-dark);
+}
+
+
+/* =========================================
+   9. REGISTER - ΜΕΓΑΛΥΤΕΡΗ ΚΑΡΤΑ
+========================================= */
+
+.register-container {
+    align-items: flex-start;
+}
+
+.register-card {
+    width: min(100%, 940px);
+}
+
+
+/* =========================================
+   10. ΦΟΡΜΕΣ - ΚΟΙΝΑ ΣΤΟΙΧΕΙΑ
+========================================= */
+
+.form-section {
+    min-width: 0;
+
+    margin: 0 0 22px;
+    padding: 22px;
+
+    border: 1px solid #E5DFF0;
+    border-radius: var(--radius-md);
+
+    background: #FEFDFF;
+
+    box-shadow:
+        0 3px 10px rgba(49, 35, 78, 0.04);
+}
+
+.form-section legend {
+    width: 100%;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    background: var(--primary-light);
+
+    color: #51215E;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+
+    min-width: 0;
+
+    margin-bottom: 16px;
+}
+
+.form-grid .form-group {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    color: var(--text);
+
+    font-size: 0.93rem;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+
+    padding: 11px 13px;
+
+    border: 1px solid #BCC3D2;
+    border-radius: var(--radius-sm);
+
+    background: white;
+
+    color: var(--text);
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #8E64B2;
+
+    box-shadow:
+        0 0 0 3px rgba(142, 100, 178, 0.13);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #9299AA;
+}
+
+.form-group textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.form-select {
+    cursor: pointer;
+}
+
+.form-subsection-title {
+    margin: 12px 0 18px;
+
+    padding: 7px 12px;
+
+    border-radius: 7px;
+
+    background: var(--accent-light);
+
+    color: #315D22;
+
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.form-help {
+    margin: 12px 0 0;
+
+    padding: 11px 14px;
+
+    border-radius: var(--radius-sm);
+
+    background: #ECEBFF;
+
+    color: #555579;
+
+    font-size: 0.9rem;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+    gap: 14px;
+
+    margin-top: 28px;
+}
+
+.form-actions .btn {
+    min-width: 180px;
+}
+
+.auth-form .form-actions {
+    margin-top: 26px;
+}
+
+.auth-form .form-actions .btn {
+    width: 100%;
+}
+
+
+/* =========================================
+   11. EDIT / WORK PAGES
+========================================= */
+
+.edit-page,
+.work-page {
+    max-width: 1160px;
+}
+
+.edit-card,
+.work-form-card {
+    padding: 28px;
+}
+
+.edit-actions,
+.work-actions {
+    padding-top: 8px;
+}
+
+
+/* =========================================
+   12. ΜΗΝΥΜΑΤΑ ΚΑΙ VALIDATION
+========================================= */
+
+.error-message,
+.success-message {
+    margin-bottom: 22px;
+
+    padding: 13px 16px;
+
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+
+    font-size: 0.93rem;
+}
+
+.error-message {
+    background: #FDEBEC;
+
+    border-color: #F5C5C9;
+
+    color: #A12632;
+}
+
+.success-message {
+    background: var(--success-light);
+
+    border-color: #B9E0C8;
+
+    color: #256B47;
+}
+
+.form-error {
+    color: var(--danger);
+
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.global-form-error {
+    display: block;
+
+    margin-bottom: 20px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #F5C5C9;
+    border-radius: var(--radius-sm);
+
+    background: #FDEBEC;
+}
+
+
+/* =========================================
+   13. ERROR PAGES 404 / 500
+========================================= */
+
+.error-page {
+    min-height: 100vh;
+}
+
+.error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: calc(100vh - 64px);
+
+    padding: 40px 20px;
+}
+
+.error-card {
+    width: min(100%, 600px);
+
+    padding: 50px 36px;
+
+    text-align: center;
+}
+
+.error-code {
+    margin-bottom: 14px;
+
+    color: #7C32A2;
+
+    font-size: clamp(4.5rem, 12vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+}
+
+.error-card h1 {
+    margin-bottom: 14px;
+}
+
+.error-description {
+    margin-bottom: 12px;
+
+    font-size: 1.08rem;
+    font-weight: 600;
+}
+
+.error-help {
+    margin-bottom: 26px;
+
+    color: var(--text-muted);
+}
+
+
+/* =========================================
+   14. ΠΑΛΙΕΣ CSS ΚΛΑΣΕΙΣ
+   Συμβατότητα με παλιότερες σελίδες
+========================================= */
+
+.listofusers_container,
+.details_table_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.register_form {
+    display: grid;
+
+    grid-template-columns: 1fr 2fr;
+
+    gap: 14px;
+
+    width: min(100%, 700px);
+
+    margin: 30px auto;
+    padding: 24px;
+
+    border-radius: var(--radius-md);
+
+    background: white;
+
+    box-shadow: var(--shadow);
+}
+
+.submit_buttom_container {
+    grid-column: 2;
+}
+
+p.error {
+    color: var(--danger);
+}
+
+#href_delete {
+    display: inline-block;
+
+    padding: 8px 12px;
+
+    border-radius: var(--radius-sm);
+
+    background: var(--danger);
+    color: white;
+}
+
+#href_details {
+    display: inline-block;
+
+    padding: 8px 12px;
+
+    border-radius: var(--radius-sm);
+
+    background: var(--accent);
+    color: white;
+}
+
+
+
+/* =========================================
+   CUSTOMER APP - CALENDAR / DATEPICKER
+   ========================================= */
+
+/* Calendar container */
+.ui-datepicker.customer-datepicker {
+    width: 300px;
+    padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    font-family: inherit;
+    font-size: 14px;
+    z-index: 1000 !important;
+}
+
+/* Calendar header */
+.customer-datepicker .ui-datepicker-header {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 5px;
+    position: relative;
+}
+
+/* Month and year */
+.customer-datepicker .ui-datepicker-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 0 28px;
+}
+
+/* Month and year dropdowns */
+.customer-datepicker .ui-datepicker-title select {
+    width: auto;
+    min-width: 75px;
+    padding: 5px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    color: #333333;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Previous / Next arrows */
+.customer-datepicker .ui-datepicker-prev,
+.customer-datepicker .ui-datepicker-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.customer-datepicker .ui-datepicker-prev {
+    left: 5px;
+}
+
+.customer-datepicker .ui-datepicker-next {
+    right: 5px;
+}
+
+.customer-datepicker .ui-datepicker-prev:hover,
+.customer-datepicker .ui-datepicker-next:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+}
+
+/* Calendar table */
+.customer-datepicker .ui-datepicker-calendar {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* Weekday names */
+.customer-datepicker .ui-datepicker-calendar th {
+    padding: 8px 3px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Calendar day cells */
+.customer-datepicker .ui-datepicker-calendar td {
+    padding: 3px;
+    text-align: center;
+}
+
+/* Available dates */
+.customer-datepicker .ui-datepicker-calendar td a {
+    display: block;
+    padding: 7px 4px;
+    background: transparent;
+    color: #334155;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+/* Hover over dates */
+.customer-datepicker .ui-datepicker-calendar td a:hover {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+/* Selected date */
+.customer-datepicker .ui-datepicker-calendar .ui-state-active {
+    background-color: #2563eb;
+    color: white;
+    font-weight: bold;
+}
+
+/* Today's date */
+.customer-datepicker .ui-datepicker-calendar .ui-state-highlight {
+    background-color: #eff6ff;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+/* Disabled dates */
+.customer-datepicker .ui-datepicker-calendar .ui-state-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Birthdate input */
+#birthdate {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #333333;
+    font-family: inherit;
+    font-size: 15px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+/* Birthdate input focus */
+#birthdate:focus {
+    outline: none;
+    border-color: #EEE1F7;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    
+}
+
+/* =========================================
+   CUSTOMER APP - LILAC DATEPICKER
+   Main color: #EEE1F7
+   ========================================= */
+
+/* Calendar container */
+#ui-datepicker-div {
+    width: 300px;
+    padding: 15px;
+    background: #ffffff;
+    border: 1px solid #EEE1F7;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(70, 40, 90, 0.15);
+    font-family: inherit;
+    font-size: 14px;
+    z-index: 1000 !important;
+}
+
+/* Calendar header */
+#ui-datepicker-div .ui-datepicker-header {
+    background: #EEE1F7;
+    background-image: none;
+    color: #604575;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 5px;
+    position: relative;
+}
+
+/* Month and year */
+#ui-datepicker-div .ui-datepicker-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 0 28px;
+}
+
+/* Month and year dropdowns */
+#ui-datepicker-div .ui-datepicker-title select {
+    width: auto;
+    min-width: 70px;
+    padding: 5px;
+    border: 1px solid #d5bce8;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #604575;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Previous / Next buttons */
+#ui-datepicker-div .ui-datepicker-prev,
+#ui-datepicker-div .ui-datepicker-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#ui-datepicker-div .ui-datepicker-prev {
+    left: 5px;
+}
+
+#ui-datepicker-div .ui-datepicker-next {
+    right: 5px;
+}
+
+#ui-datepicker-div .ui-datepicker-prev:hover,
+#ui-datepicker-div .ui-datepicker-next:hover {
+    background: #d5bce8;
+    border: none;
+}
+
+/* Calendar table */
+#ui-datepicker-div .ui-datepicker-calendar {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* Weekday names */
+#ui-datepicker-div .ui-datepicker-calendar th {
+    padding: 8px 3px;
+    color: #604575;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Calendar day cells */
+#ui-datepicker-div .ui-datepicker-calendar td {
+    padding: 3px;
+    text-align: center;
+}
+
+/* Available dates */
+#ui-datepicker-div .ui-datepicker-calendar td a {
+    display: block;
+    padding: 7px 4px;
+    background: transparent;
+    background-image: none;
+    color: #604575;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+/* Hover over dates */
+#ui-datepicker-div .ui-datepicker-calendar td a:hover {
+    background: #EEE1F7;
+    color: #604575;
+}
+
+/* Selected date */
+#ui-datepicker-div .ui-datepicker-calendar .ui-state-active {
+    background: #b997d2;
+    background-image: none;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Today's date */
+#ui-datepicker-div .ui-datepicker-calendar .ui-state-highlight {
+    background: #EEE1F7;
+    background-image: none;
+    color: #604575;
+    font-weight: bold;
+}
+
+/* Disabled dates */
+#ui-datepicker-div .ui-datepicker-calendar .ui-state-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Birthdate input */
+#birthdate {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d5bce8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #604575;
+    font-family: inherit;
+    font-size: 15px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+/* Birthdate input focus */
+#birthdate:focus {
+    outline: none;
+    border-color: #b997d2;
+    box-shadow: 0 0 0 3px rgba(238, 225, 247, 0.8);
+}
+/* =========================================
+   15. RESPONSIVE - TABLETS
+========================================= */
+
+@media (max-width: 900px) {
+
+    .dashboard-nav {
+        padding: 12px 20px;
+    }
+
+    .main-content {
+        width: min(100% - 32px, 1320px);
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-row {
+        grid-template-columns: 160px minmax(0, 1fr);
+    }
+
+    .auth-card {
+        padding: 28px;
+    }
+
+    .register-card {
+        width: min(100%, 800px);
+    }
+
+}
+
+
+
+/* =========================================
+   16. RESPONSIVE - ΚΙΝΗΤΑ
+========================================= */
+
+@media (max-width: 600px) {
+
+    .dashboard-nav {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 12px;
+
+        padding: 14px 16px;
+    }
+
+    .nav-brand {
+        justify-content: center;
+
+        font-size: 1.3rem;
+    }
+
+    .dashboard-nav ul {
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        gap: 6px;
+    }
+
+    .dashboard-nav li a,
+    .dashboard-nav li button {
+        padding: 9px 11px;
+
+        font-size: 0.84rem;
+    }
+
+    .main-content {
+        width: calc(100% - 24px);
+
+        padding-top: 24px;
+    }
+
+    .page-header {
+        margin-bottom: 22px;
+    }
+
+    .page-header h1 {
+        font-size: 1.55rem;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .card-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .card-header .btn {
+        width: 100%;
+    }
+
+    .detail-row {
+        grid-template-columns: 1fr;
+
+        gap: 3px;
+    }
+
+    .detail-row dd {
+        font-size: 0.98rem;
+    }
+
+    .auth-container {
+        padding: 24px 12px 40px;
+    }
+
+    .auth-card {
+        padding: 22px 18px;
+
+        border-radius: 16px;
+    }
+
+    .auth-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .auth-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-section {
+        padding: 15px;
+    }
+
+    .form-section legend {
+        font-size: 1rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+
+    .table-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .table-actions .btn {
+        width: 100%;
+    }
+
+    .account-actions {
+        justify-content: stretch;
+    }
+
+    .account-actions form,
+    .account-actions .btn {
+        width: 100%;
+    }
+
+    .error-card {
+        padding: 32px 20px;
+    }
+
+    .register_form {
+        grid-template-columns: 1fr;
+    }
+
+    .submit_buttom_container {
+        grid-column: 1;
+    }
+
+}
+
+
+/* =========================================
+   17. ΜΕΙΩΣΗ ΚΙΝΗΣΗΣ
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+
+}

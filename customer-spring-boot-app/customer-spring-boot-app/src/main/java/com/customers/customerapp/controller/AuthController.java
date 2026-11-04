@@ -1,7 +1,8 @@
 package com.customers.customerapp.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.customers.customerapp.dto.CustomerRequestDto;
+import com.customers.customerapp.exception.DuplicateAfmException;
+import com.customers.customerapp.exception.DuplicateUsernameException;
+import com.customers.customerapp.exception.RegistrationPasswordRequiredException;
 import com.customers.customerapp.service.CustomerService;
 
 import jakarta.validation.Valid;
@@ -25,6 +29,10 @@ public class AuthController {
 	        this.customerService = customerService;
 	    }
 	
+	  @GetMapping("/")
+	  public String showIndexPage() {
+	      return "index";
+	  }
 	
 	  @GetMapping("/login")
 	    public String showLoginPage() {
@@ -43,7 +51,8 @@ public class AuthController {
 	
 	  @PostMapping("/register")
 	    public String registerCustomer( @Valid @ModelAttribute("customer") CustomerRequestDto dto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
+		  /*
+		   *     Ο κωδικας που θα χρειαζομασταν αν δεν οργανωναμε το handle exceptions
 	        if (dto.getPassword() == null || dto.getPassword().isBlank()) {
 	            bindingResult.rejectValue("password", "password.required",
 	                "Το password είναι υποχρεωτικό." );
@@ -81,14 +90,50 @@ public class AuthController {
 	            );
 	            return "register";
 	        }
-
+	*/
 	        
+		  
+		  
+		  if (bindingResult.hasErrors()) {
+			    return "register";
+			}
+
+			try {
+
+			    customerService.registerCustomer(dto);
+
+			} catch (DuplicateUsernameException e) {
+			    bindingResult.rejectValue("username","duplicateUsername",
+			        e.getMessage()
+			    );
+
+			    return "register";
+
+			} catch (DuplicateAfmException e) {
+			    bindingResult.rejectValue("afm","duplicateAfm",
+			        e.getMessage()
+			    );
+
+			    return "register";
+
+			} catch (RegistrationPasswordRequiredException e) {
+			    bindingResult.rejectValue("password","requiredPassword",
+			        e.getMessage()
+			    );
+
+			    return "register";
+			}
 	        redirectAttributes.addFlashAttribute("successMessage",
 	            "Η εγγραφή ολοκληρώθηκε επιτυχώς. Μπορείς να συνδεθείς."
 	        );
 
 	        return "redirect:/login";
 	    }
+	  
+	  @ModelAttribute("today")
+	  public LocalDate today() {
+	      return LocalDate.now();
+	  }
 	}
 	
 	

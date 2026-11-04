@@ -1,6 +1,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
@@ -8,258 +9,312 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Το προφίλ μου</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Το Προφίλ μου - CustomerApp</title>
+
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
 <body>
 
-    <main class="profile-container">
+    <!-- Navigation bar -->
+    <nav class="dashboard-nav">
 
-        <h1>Το προφίλ μου</h1>
-        
-        <c:if test="${not empty successMessage}">
-    		<p class="success-message">
-       		 	<c:out value="${successMessage}"/>
-    		</p>
-		</c:if>
+        <a class="nav-brand"
+           href="${pageContext.request.contextPath}/customers/profile">
+            CustomerApp
+        </a>
 
-        <!-- ΠΡΟΣΩΠΙΚΑ ΣΤΟΙΧΕΙΑ -->
-        <section class="profile-section">
-
-            <h2>Προσωπικά στοιχεία</h2>
-
-            <p>
-                <strong>Όνομα:</strong>
-                <c:out value="${customer.name}"/>
-            </p>
-
-            <p>
-                <strong>Επώνυμο:</strong>
-                <c:out value="${customer.surname}"/>
-            </p>
-
-            <p>
-                <strong>Φύλο:</strong>
-                <c:out value="${customer.gender}"/>
-            </p>
-
-            <p>
-                <strong>ΑΦΜ:</strong>
-                <c:out value="${customer.afm}"/>
-            </p>
-
-            <p>
-                <strong>Ημερομηνία γέννησης:</strong>
-                <c:out value="${customer.birthdate}"/>
-            </p>
-
-            <p>
-                <strong>Username:</strong>
-                <c:out value="${customer.username}"/>
-            </p>
-
-        </section>
-
-        <!-- ΔΙΕΥΘΥΝΣΗ ΚΑΤΟΙΚΙΑΣ -->
-        <section class="profile-section">
-
-            <h2>Διεύθυνση κατοικίας</h2>
-
-            <p>
-                <strong>Διεύθυνση:</strong>
-                <c:out value="${customer.homeAddress.name}"/>
-            </p>
-
-            <p>
-                <strong>Ταχυδρομικός κώδικας:</strong>
-                <c:out value="${customer.homeAddress.postcode}"/>
-            </p>
-
-        </section>
-
-        <!-- ΔΙΕΥΘΥΝΣΗ ΕΡΓΑΣΙΑΣ -->
-        <section class="profile-section">
-
-            <h2>Διεύθυνση εργασίας</h2>
-
-            <p>
-                <strong>Διεύθυνση:</strong>
-                <c:out value="${customer.workAddress.name}"/>
-            </p>
-
-            <p>
-                <strong>Ταχυδρομικός κώδικας:</strong>
-                <c:out value="${customer.workAddress.postcode}"/>
-            </p>
-
-        </section>
-
-        <!-- ΠΡΟΣΘΕΤΕΣ ΠΛΗΡΟΦΟΡΙΕΣ -->
-        <section class="profile-section">
-
-            <h2>Πρόσθετες πληροφορίες</h2>
-
-            <p>
-                <c:out value="${customer.moreInfo}"/>
-            </p>
-
-        </section>
-
-        <!-- ΕΠΕΞΕΡΓΑΣΙΑ ΠΕΛΑΤΗ -->
-        <div class="profile-actions">
-
-            <a href="${pageContext.request.contextPath}/customers/edit">
-                Επεξεργασία στοιχείων πελάτη
-            </a>
-
-        </div>
-
-        <hr>
-        
-        <form action="${pageContext.request.contextPath}/customers/delete" method="post">
-
-		    <input type="hidden"
-		           name="${_csrf.parameterName}"
-		           value="${_csrf.token}">
-		
-		    <button type="submit"
-		            onclick="return confirm('Θέλεις σίγουρα να διαγράψεις τον λογαριασμό σου; Η ενέργεια δεν αναιρείται.');">
-		        Διαγραφή λογαριασμού
-		    </button>
-
-		</form>
-
-        <!-- ΕΡΓΑΣΙΕΣ ΠΕΛΑΤΗ -->
-        <section class="works-section">
-
-            <h2>Οι εργασίες μου</h2>
-
-            <p>
-                <a href="${pageContext.request.contextPath}/customers/works/new">
-                    Προσθήκη νέας εργασίας
+        <ul>
+            <li>
+                <a class="active"
+                   href="${pageContext.request.contextPath}/customers/profile">
+                    Το Προφίλ μου
                 </a>
-            </p>
+            </li>
 
-            <table class="works-table">
+            <li>
+                <a href="${pageContext.request.contextPath}/customers/edit">
+                    Επεξεργασία Στοιχείων
+                </a>
+            </li>
 
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Είδος εργασίας</th>
-                        <th>Διεύθυνση κατασκευής</th>
-                        <th>Τ.Κ.</th>
-                        <th>Χρέωση</th>
-                        <th>Πληρωμένο ποσό</th>
-                        <th>Υπόλοιπο</th>
-                        <th>Πληροφορίες</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+            <li>
+                <form action="${pageContext.request.contextPath}/logout"
+                      method="post">
 
-                <tbody>
+                    <input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}">
 
-                    <c:forEach var="work" items="${works}">
+                    <button type="submit">
+                        Αποσύνδεση
+                    </button>
 
-                        <tr>
-                            <td>
-                                <c:out value="${work.id}"/>
-                            </td>
+                </form>
+            </li>
+        </ul>
 
-                            <td>
-                                <c:out value="${work.workType}"/>
-                            </td>
+    </nav>
 
-                            <td>
-                                <c:out value="${work.constructionAddress.name}"/>
-                            </td>
+    <main class="main-content">
 
-                            <td>
-                                <c:out value="${work.constructionAddress.postcode}"/>
-                            </td>
+        <!-- Καλωσόρισμα -->
+        <header class="page-header">
 
-                            <td>
-                                <c:out value="${work.chargeCost}"/>
-                            </td>
+            <div>
+                <h1>
+                    Καλώς ήρθατε,
+                    <c:out value="${customer.name}"/>
+                    <c:out value="${customer.surname}"/>
+                </h1>
 
-                            <td>
-                                <c:out value="${work.paidCharge}"/>
-                            </td>
+                <p>
+                    Επισκόπηση του λογαριασμού
+                    και των εργασιών σας.
+                </p>
+            </div>
 
-                            <td>
-                                <strong>
-                                    <c:out value="${work.remainingCharge}"/>
-                                </strong>
-                            </td>
+        </header>
 
-                            <td>
-                                <c:out value="${work.moreInfo}"/>
-                            </td>
+        <!-- Μήνυμα επιτυχίας -->
+        <c:if test="${not empty successMessage}">
+            <div class="success-message">
+                <c:out value="${successMessage}"/>
+            </div>
+        </c:if>
 
-                            <td class="work-actions">
+        <!-- Στοιχεία πελάτη και διευθύνσεις -->
+        <section class="cards-grid">
 
-                                <!-- ΕΠΕΞΕΡΓΑΣΙΑ ΕΡΓΑΣΙΑΣ -->
-                                <a href="${pageContext.request.contextPath}/customers/works/${work.id}/edit">
-                                    Επεξεργασία
-                                </a>
+            <!-- Κάρτα πελάτη -->
+            <div class="card">
 
-                                <!-- ΔΙΑΓΡΑΦΗ ΕΡΓΑΣΙΑΣ -->
-                                <form
-                                    action="${pageContext.request.contextPath}/customers/works/${work.id}/delete"
-                                    method="post"
-                                    class="delete-work-form">
+                <div class="card-header">
 
-                                    <input type="hidden"
-                                           name="${_csrf.parameterName}"
-                                           value="${_csrf.token}">
+                    <h2>Στοιχεία Πελάτη</h2>
 
-                                    <button type="submit"
-                                            onclick="return confirm('Θέλεις σίγουρα να διαγράψεις αυτή την εργασία;');">
-                                        Διαγραφή
-                                    </button>
+                    <a class="btn btn-success"
+                       href="${pageContext.request.contextPath}/customers/edit">
+                        Επεξεργασία
+                    </a>
 
-                                </form>
+                </div>
 
-                            </td>
-                        </tr>
+                <dl class="details-list">
 
-                    </c:forEach>
+                    <div class="detail-row">
+                        <dt>Ονοματεπώνυμο:</dt>
+                        <dd>
+                            <c:out value="${customer.name}"/>
+                            <c:out value="${customer.surname}"/>
+                        </dd>
+                    </div>
 
-                    <!-- ΟΤΑΝ ΔΕΝ ΥΠΑΡΧΟΥΝ ΕΡΓΑΣΙΕΣ -->
-                    <c:if test="${empty works}">
+                    <div class="detail-row">
+                        <dt>Username:</dt>
+                        <dd>
+                            <c:out value="${customer.username}"/>
+                        </dd>
+                    </div>
 
-                        <tr>
-                            <td colspan="9">
-                                Δεν υπάρχουν καταχωρημένες εργασίες.
-                            </td>
-                        </tr>
+                    <div class="detail-row">
+                        <dt>Α.Φ.Μ.:</dt>
+                        <dd>
+                            <c:out value="${customer.afm}"/>
+                        </dd>
+                    </div>
 
-                    </c:if>
+                    <div class="detail-row">
+                        <dt>Φύλο:</dt>
+                        <dd>
+                            <c:out value="${customer.gender}"/>
+                        </dd>
+                    </div>
 
-                </tbody>
+                    <div class="detail-row">
+                        <dt>Ημερομηνία Γέννησης:</dt>
+                        <dd>
+                            <c:out value="${customer.birthdate}"/>
+                        </dd>
+                    </div>
 
-            </table>
+                    <div class="detail-row">
+                        <dt>Επιπλέον Πληροφορίες:</dt>
+                        <dd>
+                            <c:out value="${customer.moreInfo}"
+                                   default="-"/>
+                        </dd>
+                    </div>
+
+                </dl>
+
+            </div>
+
+            <!-- Κάρτα διευθύνσεων -->
+            <div class="card">
+
+                <div class="card-header">
+                    <h2>Διευθύνσεις</h2>
+                </div>
+
+                <div class="address-item">
+
+                    <h3>Διεύθυνση Κατοικίας</h3>
+
+                    <p>
+                        <c:out value="${customer.homeAddress.streetName}"/>
+                    </p>
+
+                    <p>
+                        Τ.Κ.
+                        <c:out value="${customer.homeAddress.postcode}"/>
+                    </p>
+
+                </div>
+
+                <div class="address-item">
+
+                    <h3>Διεύθυνση Εργασίας</h3>
+
+                    <p>
+                        <c:out value="${customer.workAddress.streetName}"/>
+                    </p>
+
+                    <p>
+                        Τ.Κ.
+                        <c:out value="${customer.workAddress.postcode}"/>
+                    </p>
+
+                </div>
+
+            </div>
 
         </section>
 
-        <hr>
+        <!-- Εργασίες -->
+      <section class="card" id="works">
 
-        <!-- ΑΠΟΣΥΝΔΕΣΗ -->
-        <div class="logout-section">
+            <div class="card-header">
 
-            <form action="${pageContext.request.contextPath}/logout"
+                <h2>Οι Εργασίες μου</h2>
+
+                <a class="btn btn-success"
+                   href="${pageContext.request.contextPath}/customers/works/new">
+                    + Προσθήκη Νέας Εργασίας
+                </a>
+
+            </div>
+
+            <c:choose>
+
+                <c:when test="${empty works}">
+
+                    <p class="empty-message">
+                        Δεν έχετε καταχωρήσει ακόμη εργασίες.
+                    </p>
+
+                </c:when>
+
+   <c:otherwise>
+
+             <div class="table-container">
+
+                        <table class="works-table">
+
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Περιγραφή Εργασίας</th>
+                                    <th>Διεύθυνση Κατασκευής</th>
+                                    <th>Χρέωση</th>
+                                    <th>Πληρωμή</th>
+                                    <th>Υπόλοιπο</th>
+                                    <th>Επιπλέον Πληροφορίες</th>
+                                    <th>Ενέργειες</th>
+                                </tr>
+          					  </thead>
+
+      <tbody>
+
+              <c:forEach var="work" items="${works}">
+
+                   <tr>
+
+                      <td>	<c:out value="${work.id}"/></td>
+
+                       <td> <c:out value="${work.workType}"/></td>
+
+                        <td>
+                            <c:out value="${work.constructionAddress.streetName}"/>
+                             <br>
+   							 Τ.Κ.
+                             <c:out value="${work.constructionAddress.postcode}"/>
+                        </td>
+
+                         <td><c:out value="${work.chargeCost}"/> €</td>
+
+                         <td><c:out value="${work.paidCharge}"/> €</td>
+
+                         <td><c:out value="${work.remainingCharge}"/> €</td>
+
+                         <td><c:out value="${work.moreInfo}" default="-"/></td>
+
+                         <td>
+
+                            <div class="table-actions">
+
+                               <a class="btn btn-success" href="${pageContext.request.contextPath}/customers/works/${work.id}/edit">Επεξεργασία</a>
+
+                               <form action="${pageContext.request.contextPath}/customers/works/${work.id}/delete" method="post">
+
+                                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+
+                                	 <button class="btn btn-danger" type="submit">Διαγραφή</button>
+
+                                  </form>
+
+                              </div>
+
+                         </td>
+
+                    </tr>
+				
+				</c:forEach>
+
+            </tbody>
+
+         </table>
+
+       </div>
+
+    </c:otherwise>
+
+  </c:choose>
+
+</section>
+
+        <!-- Διαγραφή λογαριασμού -->
+        <section class="account-actions">
+
+            <form action="${pageContext.request.contextPath}/customers/delete"
                   method="post">
 
                 <input type="hidden"
                        name="${_csrf.parameterName}"
                        value="${_csrf.token}">
 
-                <button type="submit">
-                    Αποσύνδεση
+                <button class="btn btn-danger"
+                        type="submit">
+                    Διαγραφή Λογαριασμού
                 </button>
 
             </form>
 
-        </div>
+        </section>
 
     </main>
 

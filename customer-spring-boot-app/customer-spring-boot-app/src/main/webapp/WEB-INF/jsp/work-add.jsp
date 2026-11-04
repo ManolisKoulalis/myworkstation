@@ -10,125 +10,181 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Προσθήκη νέας εργασίας</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Προσθήκη Εργασίας - CustomerApp</title>
+
+    <link rel="stylesheet"  href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
-<body>
+<body class="dashboard-page">
 
-    <main class="work-form-container">
+    <!-- Navigation Bar -->
+    <nav class="dashboard-nav">
 
-        <h1>Προσθήκη νέας εργασίας</h1>
+        <a class="nav-brand" href="${pageContext.request.contextPath}/customers/profile">CustomerApp</a>
 
-        <form:form action="${pageContext.request.contextPath}/customers/works/new" method="post" modelAttribute="work"
-            novalidate="novalidate">
+        <ul>
+            <li>
+                <a href="${pageContext.request.contextPath}/customers/profile">Το Προφίλ μου</a>
+            </li>
 
-            <form:errors path="" cssClass="form-error"/>
+            <li>
+                <a href="${pageContext.request.contextPath}/customers/edit">Επεξεργασία Στοιχείων</a>
+            </li>
 
-            <!-- ΣΤΟΙΧΕΙΑ ΕΡΓΑΣΙΑΣ -->
-            <section class="form-section">
+            <li>
+                <form action="${pageContext.request.contextPath}/logout" method="post">
 
-                <h2>Στοιχεία εργασίας</h2>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
-                <div class="form-group">
+                    <button type="submit">Αποσύνδεση</button>
 
-                    <label for="workType"> Είδος εργασίας:</label>
-                    <form:input path="workType"
-                        id="workType"/>
-                    <form:errors path="workType"
-                        cssClass="form-error"/>
+                </form>
+            </li>
+        </ul>
 
-                </div>
+    </nav>
 
-            </section>
+    <!-- Κεντρικό περιεχόμενο -->
+    <main class="main-content work-page">
 
-            <!-- ΔΙΕΥΘΥΝΣΗ ΚΑΤΑΣΚΕΥΗΣ -->
-            <section class="form-section">
+        <!-- Επικεφαλίδα -->
+        <header class="page-header">
 
-                <h2>Διεύθυνση κατασκευής</h2>
+            <div>
+                <h1>Προσθήκη Νέας Εργασίας</h1>
 
-                <div class="form-group">
-
-                    <label for="constructionAddressName">Διεύθυνση:</label>
-                    <form:input path="constructionAddress.name"
-                        id="constructionAddressName"/>
-                    <form:errors
-                        path="constructionAddress.name"
-                        cssClass="form-error"/>
-
-                </div>
-
-                <div class="form-group">
-
-                    <label for="constructionAddressPostcode">Ταχυδρομικός κώδικας:</label>
-                    <form:input path="constructionAddress.postcode"
-                        id="constructionAddressPostcode"/>
-                    <form:errors path="constructionAddress.postcode"
-                        cssClass="form-error"/>
-
-                </div>
-
-            </section>
-
-            <!-- ΟΙΚΟΝΟΜΙΚΑ ΣΤΟΙΧΕΙΑ -->
-            <section class="form-section">
-
-                <h2>Οικονομικά στοιχεία</h2>
-
-                <div class="form-group">
-
-                    <label for="chargeCost"> Συνολική χρέωση: </label>
-
-                    <form:input path="chargeCost"
-                        id="chargeCost"
-                        type="number"
-                        step="0.01"
-                        min="0"/>
-                    <form:errors path="chargeCost"
-                        cssClass="form-error"/>
-
-                </div>
-
-                <div class="form-group">
-
-                    <label for="paidCharge"> Πληρωμένο ποσό: </label>
-                    <form:input path="paidCharge"
-                        id="paidCharge"
-                        type="number"
-                        step="0.01"
-                        min="0"/>
-                    <form:errors path="paidCharge"
-                        cssClass="form-error"/>
-
-                </div>
-
-            </section>
-
-            <!-- ΠΡΟΣΘΕΤΕΣ ΠΛΗΡΟΦΟΡΙΕΣ -->
-            <section class="form-section">
-
-                <h2>Πρόσθετες πληροφορίες</h2>
-
-                <div class="form-group">
-
-                    <label for="moreInfo"> Παρατηρήσεις: </label>
-                    <form:textarea path="moreInfo"
-                        id="moreInfo"
-                        rows="4"/>
-                    <form:errors path="moreInfo" cssClass="form-error"/>
-
-                </div>
-
-            </section>
-
-            <!-- ΚΟΥΜΠΙΑ -->
-            <div class="form-actions">
-
-                <button type="submit"> Αποθήκευση εργασίας </button>
-                <a href="${pageContext.request.contextPath}/customers/profile">Ακύρωση</a>
-
+                <p>
+                    Συμπληρώστε τα στοιχεία
+                    της νέας εργασίας σας.
+                </p>
             </div>
 
-        </form:form>
+        </header>
+
+        <!-- Κάρτα φόρμας -->
+        <section class="card work-form-card">
+
+            <form:form modelAttribute="work" action="${pageContext.request.contextPath}/customers/works/new" method="post" cssClass="work-form"
+                novalidate="novalidate">
+
+                <!-- Γενικά σφάλματα -->
+                <form:errors path="" cssClass="form-error global-form-error" element="div"/>
+
+                <!-- Στοιχεία εργασίας -->
+                <fieldset class="form-section">
+
+                    <legend>Στοιχεία Εργασίας</legend>
+
+                    <div class="form-group">
+
+                        <form:label path="workType">Είδος / Περιγραφή Εργασίας</form:label>
+						<form:input path="workType" placeholder="π.χ. Ηλεκτρολογική εγκατάσταση"/>
+                        <form:errors path="workType" cssClass="form-error" element="div"/>
+
+                    </div>
+
+                </fieldset>
+
+                <!-- Διεύθυνση κατασκευής -->
+                <fieldset class="form-section">
+
+                    <legend>Διεύθυνση Κατασκευής</legend>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <form:label path="constructionAddress.streetName">Οδός / Διεύθυνση</form:label>
+                            <form:input path="constructionAddress.streetName" placeholder="Εισάγετε τη διεύθυνση κατασκευής"/>
+                            <form:errors path="constructionAddress.streetName" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <form:label path="constructionAddress.postcode">Ταχυδρομικός Κώδικας</form:label>
+                            <form:input path="constructionAddress.postcode" placeholder="π.χ. 54622"/>
+                            <form:errors path="constructionAddress.postcode" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+                <!-- Οικονομικά στοιχεία -->
+                <fieldset class="form-section">
+
+                    <legend>Οικονομικά Στοιχεία</legend>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <form:label path="chargeCost">Συνολική Χρέωση (€)</form:label>
+                            <form:input
+                                path="chargeCost"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"/>
+                            <form:errors path="chargeCost" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <form:label path="paidCharge">Ποσό Πληρωμής (€)</form:label>
+                            <form:input path="paidCharge"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"/>
+                            <form:errors path="paidCharge" cssClass="form-error" element="div"/>
+
+                        </div>
+
+                    </div>
+
+                    <p class="form-help">
+                        Το υπόλοιπο υπολογίζεται αυτόματα
+                        από τη συνολική χρέωση μείον
+                        το ποσό πληρωμής.
+                    </p>
+
+                </fieldset>
+
+                <!-- Επιπλέον πληροφορίες -->
+                <fieldset class="form-section">
+
+                    <legend>Επιπλέον Πληροφορίες</legend>
+
+                    <div class="form-group">
+
+                        <form:label path="moreInfo">Παρατηρήσεις</form:label>
+                        <form:textarea path="moreInfo" rows="4" placeholder="Προαιρετικές πληροφορίες για την εργασία"/>
+                        <form:errors path="moreInfo" cssClass="form-error" element="div"/>
+
+                    </div>
+
+                </fieldset>
+
+                <!-- Ενέργειες -->
+                <div class="form-actions work-actions">
+
+                    <button type="submit"  class="btn btn-primary">Αποθήκευση Εργασίας</button>
+
+                    <a class="btn btn-secondary"  href="${pageContext.request.contextPath}/customers/profile">Ακύρωση</a>
+
+                </div>
+
+            </form:form>
+
+        </section>
 
     </main>
 

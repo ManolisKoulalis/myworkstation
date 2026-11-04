@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.customers.customerapp.dto.CustomerResponseDto;
 import com.customers.customerapp.dto.WorkRequestDto;
+import com.customers.customerapp.exception.InvalidWorkPaymentException;
 import com.customers.customerapp.service.CustomerService;
 import com.customers.customerapp.service.WorkService;
 
@@ -60,7 +61,7 @@ public class WorkController {
 		        // Δημιουργούμε την εργασία για τον πελάτη
 		        workService.createWork(customer.getId(), dto);
 		
-		    } catch (IllegalArgumentException e) {
+		    } catch (InvalidWorkPaymentException e) {
 		        bindingResult.rejectValue("paidCharge","invalidPaidCharge",
 		                e.getMessage()
 		        );
@@ -121,7 +122,7 @@ public class WorkController {
 		        // Ενημερώνουμε την εργασία του συγκεκριμένου πελάτη
 		        workService.updateWork(workId,customer.getId(),dto);
 		
-		    } catch (IllegalArgumentException e) {
+		    } catch (InvalidWorkPaymentException e) {
 		
 		        bindingResult.rejectValue("paidCharge","invalidPaidCharge",
 		                e.getMessage()

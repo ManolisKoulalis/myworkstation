@@ -10,11 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.customers.customerapp.dto.AddressDto;
 import com.customers.customerapp.dto.CustomerRequestDto;
 import com.customers.customerapp.dto.CustomerResponseDto;
+import com.customers.customerapp.exception.CustomerNotFoundException;
+import com.customers.customerapp.exception.DuplicateAfmException;
+import com.customers.customerapp.exception.DuplicateUsernameException;
+import com.customers.customerapp.exception.InvalidCurrentPasswordException;
+import com.customers.customerapp.exception.RegistrationPasswordRequiredException;
 import com.customers.customerapp.model.Address;
 import com.customers.customerapp.model.Customer;
 import com.customers.customerapp.repository.CustomerRepository;
-
-
 
 @Service
 public class CustomerService {
@@ -36,7 +39,7 @@ public class CustomerService {
 			public Customer findCustomerById(Integer id) {
 				
 				  return customerRepository.findById(id)
-			                .orElseThrow(() -> new IllegalArgumentException( "Δεν βρέθηκε πελάτης με ID: " + id));
+			                .orElseThrow(() -> new CustomerNotFoundException( "Δεν βρέθηκε πελάτης με ID: " + id));
 			}
 			
 			
@@ -56,21 +59,21 @@ public class CustomerService {
 			
 			    // 1. Έλεγχος password
 			    if (dto.getPassword() == null || dto.getPassword().isBlank()) {
-			        throw new IllegalArgumentException(
+			        throw new RegistrationPasswordRequiredException(
 			            "Ο κωδικός πρόσβασης είναι υποχρεωτικός"
 			        );
 			    }
 			
 			    // 2. Έλεγχος μοναδικότητας username
 			    if (customerRepository.existsByUsername(dto.getUsername())) {
-			        throw new IllegalArgumentException(
+			        throw new DuplicateUsernameException(
 			            "Το username χρησιμοποιείται ήδη"
 			        );
 			    }
 			
 			    // 3. Έλεγχος μοναδικότητας ΑΦΜ
 			    if (customerRepository.existsByAfm(dto.getAfm())) {
-			        throw new IllegalArgumentException(
+			        throw new DuplicateAfmException(
 			            "Το ΑΦΜ χρησιμοποιείται ήδη"
 			        );
 			    }
@@ -114,14 +117,14 @@ public class CustomerService {
 		
 		    // 2. Έλεγχος μοναδικότητας username
 		    if (customerRepository.existsByUsernameAndIdNot(dto.getUsername(), customerId)) {
-		        throw new IllegalArgumentException(
+		        throw new DuplicateUsernameException(
 		            "Το username χρησιμοποιείται ήδη"
 		        );
 		    }
 		
 		    // 3. Έλεγχος μοναδικότητας ΑΦΜ
 		    if (customerRepository.existsByAfmAndIdNot(dto.getAfm(), customerId)) {
-		        throw new IllegalArgumentException(
+		        throw new DuplicateAfmException(
 		            "Το ΑΦΜ χρησιμοποιείται ήδη"
 		        );
 		    }
@@ -145,7 +148,7 @@ public class CustomerService {
 		    if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
 		
 		        if (currentPassword == null || !passwordEncoder.matches(currentPassword, customer.getPassword())) {
-		            throw new IllegalArgumentException(
+		            throw new InvalidCurrentPasswordException(
 		                "Ο τρέχων κωδικός είναι λανθασμένος"
 		            );
 		        }
@@ -191,7 +194,7 @@ public class CustomerService {
 		public CustomerResponseDto getCustomerByUsername(String username) {
 
 		    Customer customer = customerRepository.findByUsername(username)
-		            .orElseThrow(() -> new IllegalArgumentException(
+		            .orElseThrow(() -> new CustomerNotFoundException(
 		                    "Δεν βρέθηκε πελάτης με username: " + username
 		            ));
 
@@ -204,7 +207,7 @@ public class CustomerService {
 public CustomerRequestDto getCustomerForEdit(String username) {
 
     Customer customer = customerRepository.findByUsername(username).orElseThrow(() ->
-                    new IllegalArgumentException(
+                    new CustomerNotFoundException(
                             "Ο πελάτης δεν βρέθηκε."
                     )
             );

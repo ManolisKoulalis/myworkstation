@@ -1,6 +1,7 @@
 package com.customers.customerapp.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.customers.customerapp.dto.CustomerRequestDto;
 import com.customers.customerapp.dto.CustomerResponseDto;
 import com.customers.customerapp.dto.WorkResponseDto;
+import com.customers.customerapp.exception.DuplicateAfmException;
+import com.customers.customerapp.exception.DuplicateUsernameException;
+import com.customers.customerapp.exception.InvalidCurrentPasswordException;
 import com.customers.customerapp.service.CustomerService;
 import com.customers.customerapp.service.WorkService;
 
@@ -64,22 +68,31 @@ public class CustomerController {
     
     
 
-@PostMapping("/customers/edit")
-public String updateCustomer(
-        @Valid @ModelAttribute("customer") CustomerRequestDto dto,
-        BindingResult bindingResult,
-        @RequestParam(name = "currentPassword", required = false) String currentPassword,
-        Principal principal,
-        HttpServletRequest request,
-        HttpServletResponse response,
-        RedirectAttributes redirectAttributes) {
+	@PostMapping("/customers/edit")
+	public String updateCustomer(
+	        @Valid @ModelAttribute("customer") CustomerRequestDto dto,
+	        BindingResult bindingResult,
+	        @RequestParam(name = "currentPassword", required = false) String currentPassword,
+	        Principal principal,
+	        HttpServletRequest request,
+	        HttpServletResponse response,
+	        RedirectAttributes redirectAttributes) {
 
+	
+	 // Αν υπαρχει validation error
+    if (bindingResult.hasErrors()) {
+        return "customer-edit";
+    }
+    
     String oldUsername = principal.getName();
 
-    CustomerResponseDto customer =
-            customerService.getCustomerByUsername(oldUsername);
+    CustomerResponseDto customer =customerService.getCustomerByUsername(oldUsername);
 
     Integer customerId = customer.getId();
+
+    /*
+     * Ο κωδικας χωρις το habdle exception
+
 
     // Έλεγχος μοναδικότητας username
     if (!bindingResult.hasFieldErrors("username") && !dto.getUsername().equals(oldUsername) && customerService.usernameExists(dto.getUsername())) {
@@ -101,18 +114,41 @@ public String updateCustomer(
     if (bindingResult.hasErrors()) {
         return "customer-edit";
     }
-
+*/
+   
+    
     //Update 
     try {
-        customerService.updateCustomer(customerId,dto,currentPassword);
-    } catch (IllegalArgumentException e) {
 
-        bindingResult.reject("customerUpdateError",
+        customerService.updateCustomer(customerId, dto,currentPassword
+        );
+
+    } catch (DuplicateUsernameException e) {
+
+        bindingResult.rejectValue("username","duplicateUsername",
+                e.getMessage()
+        );
+
+        return "customer-edit";
+
+    } catch (DuplicateAfmException e) {
+
+        bindingResult.rejectValue("afm","duplicateAfm",
+                e.getMessage()
+        );
+
+        return "customer-edit";
+
+    } catch (InvalidCurrentPasswordException e) {
+
+        bindingResult.reject("invalidCurrentPassword",
                 e.getMessage()
         );
 
         return "customer-edit";
     }
+
+   
 
     // Αν άλλαξε το username, απαιτείται νέα σύνδεση
     if (!oldUsername.equals(dto.getUsername())) {
@@ -153,6 +189,11 @@ public String updateCustomer(
 		                    SecurityContextHolder.getContext().getAuthentication());
 		
 		    return "redirect:/login?accountDeleted";
+		}
+		
+		@ModelAttribute("today")
+		public LocalDate today() {
+		    return LocalDate.now();
 		}
 		
 		}

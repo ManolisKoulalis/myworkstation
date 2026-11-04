@@ -1,20 +1,22 @@
 package com.customers.customerapp.service;
 
-
-
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.customers.customerapp.dto.AddressDto;
 import com.customers.customerapp.dto.WorkRequestDto;
 import com.customers.customerapp.dto.WorkResponseDto;
+import com.customers.customerapp.exception.CustomerNotFoundException;
+import com.customers.customerapp.exception.InvalidWorkPaymentException;
+import com.customers.customerapp.exception.WorkNotFoundException;
 import com.customers.customerapp.model.Address;
 import com.customers.customerapp.model.Customer;
 import com.customers.customerapp.model.Work;
 import com.customers.customerapp.repository.CustomerRepository;
 import com.customers.customerapp.repository.WorkRepository;
-
+@Service
 public class WorkService {
 
 	
@@ -31,7 +33,8 @@ public class WorkService {
 	@Transactional(readOnly = true)
 	public Work findWorkById(Integer workId) {
 		
-		Work work=workRepository.findById(workId).orElseThrow(() -> new IllegalArgumentException( "Δεν βρέθηκε εργασια με ID: " + workId));
+		Work work=workRepository.findById(workId).orElseThrow(() -> new WorkNotFoundException(
+				"Δεν βρέθηκε εργασια με ID: " + workId));
 		
 		return work;
 	}
@@ -56,8 +59,7 @@ public class WorkService {
 		Work work=findWorkByIdAndCustomerId(workId, customerId);
 		
 		  // Βρίσκουμε τον πελάτη
-		Customer customer = customerRepository.findById(customerId).orElseThrow(() ->
-	                new IllegalArgumentException(
+		Customer customer = customerRepository.findById(customerId).orElseThrow(()-> new CustomerNotFoundException(
 	                    "Δεν βρέθηκε πελάτης με ID: " + customerId
 	                )
 	            );
@@ -84,18 +86,13 @@ public class WorkService {
 	 public Integer createWork(Integer customerId,WorkRequestDto dto) {
 
 		    // 1. Βρίσκουμε τον πελάτη
-		    Customer customer = customerRepository.findById(customerId).orElseThrow(() ->
-		                new IllegalArgumentException(
+		    Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new CustomerNotFoundException(
 		                    "Δεν βρέθηκε πελάτης με ID: " + customerId
 		                )
 		            );
 
 		    // 2. Ελέγχουμε τα ποσά
-		    if (dto.getPaidCharge().compareTo(dto.getChargeCost()) > 0) {
-		        throw new IllegalArgumentException(
-		            "Το πληρωμένο ποσό δεν μπορεί να υπερβαίνει τη χρέωση"
-		        );
-		    }
+		    validateWorkPayment(dto);
 
 		    // 3. Δημιουργούμε τη νέα εργασία
 		    Work work = new Work();
@@ -142,11 +139,8 @@ public class WorkService {
 	     }
 	     
 	     */
-	     if (dto.getPaidCharge().compareTo(dto.getChargeCost()) > 0) {
-	         throw new IllegalArgumentException(
-	             "Το πληρωμένο ποσό δεν μπορεί να υπερβαίνει τη χρέωση"
-	         );
-	     }
+	     // κληση της μεθοδου για τον ελεγχο εγκυροτητας μεταξυ των ποσων
+	     validateWorkPayment(dto);
 
 	     // 3. Ενημερώνουμε την υπάρχουσα Work Entity
 	     work.setWorkType(dto.getWorkType());
@@ -165,14 +159,22 @@ public class WorkService {
 	 
 	 
 	 
-	 
+	 private void validateWorkPayment(WorkRequestDto dto) {
+
+		    if (dto.getPaidCharge().compareTo(dto.getChargeCost()) > 0) {
+
+		        throw new InvalidWorkPaymentException(
+		                "Το πληρωμένο ποσό δεν μπορεί να υπερβαίνει "
+		                + "τη συνολική χρέωση."
+		        );
+		    }
+		}
 	 
 	 
 	 // για να μην επαναλαμβανουμε τον κωδικα στο update και στο getWorkById
 	 private Work findWorkByIdAndCustomerId(Integer workId,Integer customerId) {
 
-		    return workRepository.findByIdAndCustomerId(workId, customerId) .orElseThrow(() ->
-		                new IllegalArgumentException(
+		    return workRepository.findByIdAndCustomerId(workId, customerId) .orElseThrow(() ->new WorkNotFoundException(
 		                    "Δεν βρέθηκε εργασία με ID: " + workId
 		                )
 		            );
@@ -213,6 +215,7 @@ public WorkRequestDto getWorkForEdit(Integer workId,Integer customerId) {
 		 
 		WorkResponseDto dto= new WorkResponseDto();
 		
+		dto.setId(work.getId());
 		dto.setWorkType(work.getWorkType());
 		dto.setChargeCost(work.getChargeCost());
 		dto.setMoreInfo(work.getMoreInfo());

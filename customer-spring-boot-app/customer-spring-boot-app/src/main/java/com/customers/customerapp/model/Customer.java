@@ -2,7 +2,7 @@ package com.customers.customerapp.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -66,7 +66,7 @@ public class Customer {
 	@JoinTable(name="Customer_Work",
 					joinColumns=@JoinColumn(name="Customer_Id"),
 					inverseJoinColumns=@JoinColumn(name="Work_Id"))
-	private ArrayList<Work> worklist;
+	private List<Work> worklist;
 
 	public void addWork(Work work) {
 		worklist.add(work);
@@ -165,18 +165,18 @@ public class Customer {
 		this.workAddress = workAddress;
 	}
 
-	public ArrayList<Work> getWorklist() {
+	public List<Work> getWorklist() {
 		return worklist;
 	}
 
-	public void setWorklist(ArrayList<Work> worklist) {
+	public void setWorklist(List<Work> worklist) {
 		this.worklist = worklist;
 	}
 
 	
 	//constructors
 	public Customer(Integer id, String name, String surname, String gender, LocalDate birthdate, String afm, String username,
-			String password, String moreInfo, Address homeAddress, Address workAddress, ArrayList<Work> worklist) {
+			String password, String moreInfo, Address homeAddress, Address workAddress, List<Work> worklist) {
 		
 		this.id = id;
 		this.name = name;
@@ -193,7 +193,7 @@ public class Customer {
 	}
 
 	public Customer(String name, String surname, String gender, LocalDate birthdate, String afm, String username,
-			String password, String moreInfo, Address homeAddress, Address workAddress, ArrayList<Work> worklist) {
+			String password, String moreInfo, Address homeAddress, Address workAddress, List<Work> worklist) {
 		
 		this.name = name;
 		this.surname = surname;

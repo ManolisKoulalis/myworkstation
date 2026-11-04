@@ -3,11 +3,12 @@ package com.customers.customerapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import jakarta.servlet.DispatcherType;
 
 @Configuration
 public class SecurityConfig {
@@ -21,16 +22,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/login",
-                    "/register",
-                    "/css/**",
-                    "/js/**",
-                    "/images/**"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
+        .authorizeHttpRequests(auth -> auth
+        	    .dispatcherTypeMatchers(
+        	        DispatcherType.FORWARD,
+        	        DispatcherType.ERROR
+        	    ).permitAll()
+
+        	    .requestMatchers(
+        	    	"/",
+        	        "/login",
+        	        "/register",
+        	        "/css/**",
+        	        "/js/**",
+        	        "/images/**"
+        	    ).permitAll()
+
+        	    .anyRequest().authenticated()
+        	)
 
             .formLogin(form -> form
                 .loginPage("/login")
