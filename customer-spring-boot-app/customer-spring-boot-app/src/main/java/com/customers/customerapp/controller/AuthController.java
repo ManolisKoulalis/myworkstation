@@ -123,10 +123,17 @@ public class AuthController {
 
 			    return "register";
 			}
+
+			/* χρησιμοποιουμε την παρακατω εντολη γιατι θελουμε να μεταφερουμε στο redirect που κανουμε ενα απλο μηνυμα και οχι να γεμισουμε καποιο model
+	            σε περιπτωση που κανει refresh ο χρηστης το μηνυμα χανεται
+				*/
 	        redirectAttributes.addFlashAttribute("successMessage",
 	            "Η εγγραφή ολοκληρώθηκε επιτυχώς. Μπορείς να συνδεθείς."
 	        );
 
+			/*χρησιμοποιουμε redirect και οχι απλο return loogin καθως με το απλο login δεν θα αλλαζε το url μετα το register καθως δεν θα ζητουσαμε απο τον server νεο getmapping /login
+				ετσι ο χρηστης αν εκανε refresh μπορει να εκανε ξανα υποβολη της φορμας και να δημιουργουταν ερρορ
+				*/
 	        return "redirect:/login";
 	    }
 	  
