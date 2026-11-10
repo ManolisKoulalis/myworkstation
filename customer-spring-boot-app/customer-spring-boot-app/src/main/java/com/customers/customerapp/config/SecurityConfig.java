@@ -40,6 +40,9 @@ public class SecurityConfig {
         	    .anyRequest().authenticated()
         	)
 
+
+            /* ουσιαστικα το spring security εκτελει μονο του το post/login που ορισαμε επειτα μεσω την κλασης CustomerUserDetailsService που υλοποιησαμε μπορει 
+            και κανει το authentication με βαση το username που υπαρχει πραγματικα στην βαση και ελεγχει και τον κωδικο */
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
