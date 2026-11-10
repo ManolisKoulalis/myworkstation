@@ -114,11 +114,24 @@
        <label for="afm"><b>ΑΦΜ:*</b></label>
        <input type="text" value="${customer != null ? customer.afm : ''}" placeholder="Τοποθετήστε το ΑΦΜ " name="afm"  id="afm" required maxlength="9" pattern="[0-9]{9}" oninvalid="this.setCustomValidity('Please Enter Your AFM(Exactly 9 Digits)')" oninput="this.setCustomValidity('')">
         
-        <!-- χρησιμοποιω τον ελεγχο προκειμενου οταν εχω nested object να μην υπαρχει η περιπτωση για silent 
-    bug πχ αν καταλαθος ειχα κανει στο back end customer.setWorkAddress(null) απλα φαινεται κενο χωρις
-     να δειχνει το bug επισης δεν καταλαβαινεις αν λειπει data καταλαθος καθως φαινεται κενο αλλα δεν β
-     γαζει ερρορ επισης μεχρι και λαθος field name να βαλουμε και να μην καλουμε το σωστο του entity θα
-      φαινεται κενο χωρις να δειχνει το τι φταει-->
+        <!--
+			Χρησιμοποιώ τον έλεγχο null για να αποφύγω την προσπέλαση
+			ενός nested object όταν αυτό δεν υπάρχει.
+			
+			Προσοχή όμως: ο έλεγχος μπορεί να κρύψει ένα bug (silent bug).
+			
+			Για παράδειγμα, αν στο backend γίνει κατά λάθος:
+			customer.setWorkAddress(null);
+			
+			τότε το input θα εμφανιστεί κενό, χωρίς να καταλάβω
+			ότι λείπει η διεύθυνση εργασίας.
+			
+			Έτσι δεν μπορώ να ξεχωρίσω αν το πεδίο είναι
+			σκόπιμα κενό ή αν υπάρχει κάποιο πρόβλημα στα δεδομένα.
+			
+			Γι' αυτό, όταν το workAddress είναι υποχρεωτικό,
+			πρέπει να ελέγχω την ύπαρξή του και στο backend.
+			-->
         <label for="workAddressName"><b>Διεύθυνση Εργασίας:</b></label>
         <textarea placeholder="Διευθυνση Εργασίας" name="workAddressName" id="workAddressName" required oninvalid="this.setCustomValidity('Work address is required, Work Address characters should not exceed limit (255)')"rows="4" cols="50">${customer != null && customer.workAddress != null ? customer.workAddress.name : ''}</textarea>
 
