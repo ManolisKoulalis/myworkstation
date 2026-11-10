@@ -19,6 +19,8 @@ public class CustomerUserDetailsService implements UserDetailsService {
         this.customerRepository = customerRepository;
     }
 
+    /* ουσιαστικα το spring security εκτελει μονο του το post/login που ορισαμε επειτα μεσω την κλασης CustomerUserDetailsService που υλοποιησαμε μπορει 
+     και κανει το authentication με βαση το username που υπαρχει πραγματικα στην βαση και ελεγχει και τον κωδικο */
     //Η δουλειά της είναι να φορτώνει τα στοιχεία ενός χρήστη με βάση το username του.
     //Όταν το Spring Security χρειαστεί να ταυτοποιήσει έναν χρήστη, θα μπορεί να χρησιμοποιήσει τη συγκεκριμένη υλοποίηση για να ανακτήσει τα στοιχεία του από τη βάση
     @Override
